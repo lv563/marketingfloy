@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Floymer Bencomo | Portafolio Profesional</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ===== ROOT VARIABLES ===== */
+    :root {
+      --pink-light:   #FFE4F0;
+      --pink-soft:    #F9A8D4;
+      --pink-mid:     #EC4899;
+      --pink-deep:    #BE185D;
+      --yellow-pale:  #FFFBEB;
+      --yellow-light: #FEF08A;
+      --yellow-soft:  #FDE68A;
+      --yellow-mid:   #FACC15;
+      --white:        #FFFFFF;
+      --gray-50:      #FAFAFA;
+      --gray-100:     #F3F4F6;
+      --gray-600:     #4B5563;
+      --gray-800:     #1F2937;
+      --shadow-sm:    0 2px 8px rgba(236,72,153,.12);
+      --shadow-md:    0 8px 30px rgba(236,72,153,.18);
+      --shadow-lg:    0 20px 60px rgba(236,72,153,.22);
+      --radius:       16px;
+      --radius-sm:    10px;
+      --transition:   .35s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--yellow-pale);
+      color: var(--gray-800);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1.5px solid var(--pink-light);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+      box-shadow: 0 2px 20px rgba(236,72,153,.08);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--pink-mid), var(--yellow-mid));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none; font-size: .88rem; font-weight: 500;
+      color: var(--gray-600); transition: color var(--transition);
+      position: relative; padding-bottom: 3px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: linear-gradient(90deg, var(--pink-mid), var(--yellow-mid));
+      transition: width var(--transition);
+    }
+    .nav-links a:hover { color: var(--pink-mid); }
+    .nav-links a:hover::after { width: 100%; }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 6px; border: none; background: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--pink-mid); border-radius: 2px;
+      transition: var(--transition);
+    }
+    .mobile-menu {
+      display: none; position: fixed; top: 68px; left: 0; right: 0;
+      background: white; border-bottom: 1.5px solid var(--pink-light);
+      padding: 1.5rem 5%; box-shadow: var(--shadow-md); z-index: 999;
+    }
+    .mobile-menu.open { display: flex; flex-direction: column; gap: 1rem; }
+    .mobile-menu a {
+      text-decoration: none; font-weight: 500;
+      color: var(--gray-600); font-size: .95rem;
+      padding: .5rem 0; border-bottom: 1px solid var(--pink-light);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #FFF0F8 0%, #FFFBEB 40%, #FFF5F9 100%);
+      display: flex; align-items: center;
+      padding: 100px 5% 60px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute;
+      top: -120px; right: -120px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(249,168,212,.35) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: ''; position: absolute;
+      bottom: -80px; left: -80px;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(253,230,138,.45) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center; position: relative; z-index: 1;
+    }
+    .hero-text .badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: linear-gradient(135deg, var(--pink-light), var(--yellow-soft));
+      border: 1.5px solid var(--pink-soft);
+      padding: .45rem 1.1rem; border-radius: 100px;
+      font-size: .8rem; font-weight: 600; color: var(--pink-deep);
+      margin-bottom: 1.5rem; letter-spacing: .04em;
+    }
+    .hero-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 900; line-height: 1.12;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--pink-deep) 0%, var(--pink-mid) 50%, var(--yellow-mid) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-text .subtitle {
+      font-size: 1rem; color: var(--pink-mid); font-weight: 600;
+      margin-bottom: 1.2rem; letter-spacing: .02em;
+    }
+    .hero-text p {
+      font-size: 1rem; color: var(--gray-600); line-height: 1.8;
+      margin-bottom: 2rem; max-width: 480px;
+    }
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep));
+      color: white; text-decoration: none;
+      padding: .85rem 1.8rem; border-radius: 100px;
+      font-weight: 600; font-size: .9rem;
+      box-shadow: 0 4px 20px rgba(236,72,153,.35);
+      transition: var(--transition);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(236,72,153,.45);
+    }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: linear-gradient(135deg, var(--yellow-soft), var(--yellow-mid));
+      color: var(--gray-800); text-decoration: none;
+      padding: .85rem 1.8rem; border-radius: 100px;
+      font-weight: 600; font-size: .9rem;
+      box-shadow: 0 4px 20px rgba(250,204,21,.3);
+      transition: var(--transition);
+    }
+    .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(250,204,21,.4); }
+    .hero-photo {
+      display: flex; justify-content: center; align-items: center;
+      position: relative;
+    }
+    .photo-frame {
+      width: 340px; height: 400px;
+      background: linear-gradient(145deg, var(--pink-light), var(--yellow-soft));
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-lg);
+      position: relative; overflow: hidden;
+      animation: morphShape 8s ease-in-out infinite;
+    }
+    @keyframes morphShape {
+      0%,100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+      33%      { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
+      66%      { border-radius: 50% 50% 30% 70% / 40% 60% 40% 60%; }
+    }
+    .photo-frame img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .photo-frame img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+    }
+    .floating-tag {
+      position: absolute; background: white;
+      border-radius: var(--radius-sm); padding: .6rem 1rem;
+      box-shadow: var(--shadow-md); font-size: .78rem; font-weight: 600;
+      display: flex; align-items: center; gap: .5rem;
+      animation: float 3s ease-in-out infinite;
+    }
+    .floating-tag:nth-child(2) { top: 10%; left: -20px; color: var(--pink-mid); animation-delay: 0s; }
+    .floating-tag:nth-child(3) { bottom: 20%; right: -15px; color: #7C3AED; animation-delay: 1s; }
+    .floating-tag:nth-child(4) { bottom: 5%; left: -10px; color: var(--yellow-mid); background: var(--pink-deep); color: white; animation-delay: 2s; }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+
+    /* ===== SECTION BASE ===== */
+    section { padding: 90px 5%; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 3.5rem; }
+    .section-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--pink-light), var(--yellow-soft));
+      border: 1.5px solid var(--pink-soft); border-radius: 100px;
+      padding: .35rem 1rem; font-size: .78rem; font-weight: 600;
+      color: var(--pink-deep); letter-spacing: .06em;
+      text-transform: uppercase; margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 800;
+      background: linear-gradient(135deg, var(--pink-deep), var(--pink-mid));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: .8rem;
+    }
+    .section-sub {
+      color: var(--gray-600); font-size: 1rem; max-width: 520px; margin: 0 auto;
+    }
+    .divider {
+      width: 60px; height: 4px;
+      background: linear-gradient(90deg, var(--pink-mid), var(--yellow-mid));
+      border-radius: 4px; margin: 1rem auto 0;
+    }
+
+    /* ===== ABOUT ===== */
+    #sobre-mi { background: white; }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1.4fr;
+      gap: 4rem; align-items: start;
+    }
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .stat-card {
+      background: linear-gradient(135deg, var(--pink-light), var(--yellow-pale));
+      border: 1.5px solid var(--pink-soft); border-radius: var(--radius);
+      padding: 1.5rem; text-align: center;
+      transition: var(--transition);
+    }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 900;
+      background: linear-gradient(135deg, var(--pink-mid), var(--yellow-mid));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; display: block;
+    }
+    .stat-label { font-size: .8rem; color: var(--gray-600); font-weight: 500; }
+    .about-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700; color: var(--pink-deep);
+      margin-bottom: 1rem;
+    }
+    .about-text p { color: var(--gray-600); margin-bottom: 1.2rem; line-height: 1.8; }
+    .skill-pills {
+      display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.5rem;
+    }
+    .pill {
+      background: linear-gradient(135deg, var(--pink-light), var(--yellow-pale));
+      border: 1.5px solid var(--pink-soft); border-radius: 100px;
+      padding: .4rem .95rem; font-size: .8rem; font-weight: 600;
+      color: var(--pink-deep); display: flex; align-items: center; gap: .4rem;
+    }
+
+    /* ===== SERVICES ===== */
+    #servicios { background: linear-gradient(180deg, var(--yellow-pale), var(--pink-light) 100%); }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem;
+    }
+    .service-card {
+      background: white; border-radius: var(--radius);
+      padding: 2rem 1.8rem;
+      border: 1.5px solid transparent;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--pink-mid), var(--yellow-mid));
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--pink-soft);
+      box-shadow: var(--shadow-md);
+    }
+    .service-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--pink-light), var(--yellow-soft));
+      border-radius: var(--radius-sm); margin-bottom: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .service-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--pink-deep); margin-bottom: .9rem;
+    }
+    .service-list { list-style: none; }
+    .service-list li {
+      font-size: .87rem; color: var(--gray-600);
+      padding: .32rem 0; display: flex; align-items: center; gap: .55rem;
+    }
+    .service-list li::before {
+      content: '✓'; color: var(--pink-mid);
+      font-weight: 700; font-size: .8rem;
+      background: var(--pink-light); border-radius: 50%;
+      width: 18px; height: 18px; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    /* ===== EXPERIENCE ===== */
+    #experiencia { background: white; }
+    .timeline { position: relative; padding-left: 2.5rem; }
+    .timeline::before {
+      content: ''; position: absolute;
+      left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, var(--pink-mid), var(--yellow-mid));
+      border-radius: 3px;
+    }
+    .timeline-item {
+      position: relative; margin-bottom: 2.5rem;
+    }
+    .timeline-item::before {
+      content: ''; position: absolute;
+      left: -2.65rem; top: 8px;
+      width: 14px; height: 14px;
+      background: linear-gradient(135deg, var(--pink-mid), var(--yellow-mid));
+      border-radius: 50%; border: 3px solid white;
+      box-shadow: 0 0 0 3px var(--pink-soft);
+    }
+    .timeline-card {
+      background: linear-gradient(135deg, #FFF5F9, var(--yellow-pale));
+      border: 1.5px solid var(--pink-light);
+      border-radius: var(--radius); padding: 1.8rem;
+      transition: var(--transition);
+    }
+    .timeline-card:hover { box-shadow: var(--shadow-md); transform: translateX(4px); }
+    .timeline-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: .5rem;
+    }
+    .timeline-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--pink-deep);
+    }
+    .timeline-header .company {
+      font-size: .85rem; color: var(--pink-mid); font-weight: 600; margin-top: .25rem;
+    }
+    .period-badge {
+      background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep));
+      color: white; border-radius: 100px;
+      padding: .3rem .85rem; font-size: .75rem; font-weight: 600;
+      white-space: nowrap;
+    }
+    .exp-tasks {
+      display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem;
+    }
+    .task-tag {
+      background: white; border: 1.5px solid var(--pink-soft);
+      border-radius: 100px; padding: .3rem .75rem;
+      font-size: .78rem; color: var(--gray-600); font-weight: 500;
+    }
+
+    /* ===== PROJECTS ===== */
+    #proyectos { background: linear-gradient(180deg, var(--pink-light) 0%, var(--yellow-pale) 100%); }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem;
+    }
+    .project-card {
+      background: white; border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      border: 1.5px solid transparent;
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--pink-soft);
+      box-shadow: var(--shadow-md);
+    }
+    .project-thumb {
+      height: 160px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem; position: relative; overflow: hidden;
+    }
+    .project-thumb-1 { background: linear-gradient(135deg, #FFD6E7, #FFF0B3); }
+    .project-thumb-2 { background: linear-gradient(135deg, #E8D5FF, #FFD6E7); }
+    .project-thumb-3 { background: linear-gradient(135deg, #D6F5D6, #FFF0B3); }
+    .project-thumb-4 { background: linear-gradient(135deg, #FFD6E7, #D6EAFF); }
+    .project-body { padding: 1.5rem; }
+    .project-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--pink-deep);
+      margin-bottom: .6rem;
+    }
+    .project-body p { font-size: .87rem; color: var(--gray-600); margin-bottom: 1rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .project-tag {
+      background: var(--pink-light); border-radius: 100px;
+      padding: .25rem .65rem; font-size: .75rem;
+      color: var(--pink-deep); font-weight: 600;
+    }
+
+    /* ===== TOOLS ===== */
+    #herramientas { background: white; }
+    .tools-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem;
+    }
+    .tool-card {
+      background: linear-gradient(145deg, var(--pink-light), var(--yellow-pale));
+      border: 1.5px solid var(--pink-soft);
+      border-radius: var(--radius); padding: 1.5rem 1rem;
+      text-align: center; transition: var(--transition);
+    }
+    .tool-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .tool-icon { font-size: 2rem; margin-bottom: .6rem; display: block; }
+    .tool-name { font-weight: 700; font-size: .9rem; color: var(--pink-deep); display: block; }
+    .tool-level {
+      font-size: .75rem; color: var(--gray-600); margin-top: .3rem; display: block;
+    }
+    .tool-bar {
+      width: 100%; height: 4px; background: var(--pink-light);
+      border-radius: 4px; margin-top: .6rem; overflow: hidden;
+    }
+    .tool-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--pink-mid), var(--yellow-mid));
+      border-radius: 4px; transition: width 1.2s ease;
+    }
+
+    /* ===== EDUCATION ===== */
+    #formacion { background: linear-gradient(180deg, var(--yellow-pale), var(--pink-light) 100%); }
+    .edu-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
+    }
+    .edu-card {
+      background: white; border-radius: var(--radius);
+      padding: 1.8rem; border: 1.5px solid var(--pink-light);
+      box-shadow: var(--shadow-sm); transition: var(--transition);
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .edu-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .edu-icon {
+      width: 48px; height: 48px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep));
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem;
+    }
+    .edu-body h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700; font-size: 1rem; color: var(--pink-deep); margin-bottom: .3rem;
+    }
+    .edu-body p { font-size: .85rem; color: var(--gray-600); }
+
+    /* ===== ACHIEVEMENTS ===== */
+    #logros { background: white; }
+    .achievements-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    .achievement-card {
+      background: linear-gradient(145deg, var(--pink-light), var(--yellow-pale));
+      border: 1.5px solid var(--pink-soft); border-radius: var(--radius);
+      padding: 1.8rem 1.5rem; text-align: center;
+      transition: var(--transition);
+    }
+    .achievement-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+    .achievement-icon {
+      font-size: 2.2rem; margin-bottom: .8rem; display: block;
+    }
+    .achievement-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; color: var(--pink-deep); margin-bottom: .5rem;
+    }
+    .achievement-card p { font-size: .84rem; color: var(--gray-600); }
+
+    /* ===== GALLERY ===== */
+    #galeria { background: linear-gradient(180deg, var(--pink-light) 0%, var(--yellow-pale) 100%); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto;
+      gap: 1rem;
+    }
+    .gallery-item {
+      border-radius: var(--radius); overflow: hidden;
+      aspect-ratio: 1; position: relative;
+      background: linear-gradient(135deg, var(--pink-light), var(--yellow-soft));
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--transition);
+      border: 2px solid var(--pink-soft);
+    }
+    .gallery-item:hover { transform: scale(1.03); box-shadow: var(--shadow-md); }
+    .gallery-item:first-child { grid-column: span 2; aspect-ratio: 2/1; }
+    .gallery-placeholder {
+      text-align: center; color: var(--pink-mid);
+    }
+    .gallery-placeholder i { font-size: 2.5rem; display: block; margin-bottom: .4rem; opacity: .6; }
+    .gallery-placeholder span { font-size: .78rem; font-weight: 600; opacity: .8; }
+    .gallery-upload-hint {
+      text-align: center; margin-top: 1.5rem;
+      font-size: .87rem; color: var(--pink-mid); font-weight: 500;
+    }
+
+    /* ===== CONTACT ===== */
+    #contacto {
+      background: linear-gradient(145deg, var(--pink-deep) 0%, var(--pink-mid) 50%, #F97316 100%);
+      color: white;
+    }
+    #contacto .section-title {
+      background: linear-gradient(135deg, #FFE4F0, var(--yellow-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    #contacto .section-sub { color: rgba(255,255,255,.85); }
+    .contact-solo {
+      max-width: 620px; margin: 0 auto; text-align: center;
+    }
+    .contact-solo h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700; color: white; margin-bottom: 2rem;
+    }
+    .contact-items { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-item {
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+      border-radius: var(--radius-sm); padding: 1rem 1.3rem;
+      text-decoration: none; color: white; transition: var(--transition);
+      text-align: left;
+    }
+    .contact-item:hover { background: rgba(255,255,255,.22); transform: translateX(4px); }
+    .contact-item .ci-icon {
+      width: 42px; height: 42px;
+      background: rgba(255,255,255,.2); border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-item .ci-label { font-size: .78rem; opacity: .75; }
+    .contact-item .ci-value { font-weight: 600; font-size: .95rem; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--gray-800); color: rgba(255,255,255,.7);
+      text-align: center; padding: 2.5rem 5%;
+      font-size: .85rem;
+    }
+    footer span {
+      background: linear-gradient(135deg, var(--pink-soft), var(--yellow-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-weight: 700;
+    }
+
+    /* ===== SCROLL TO TOP ===== */
+    .scroll-top {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--pink-mid), var(--yellow-mid));
+      border: none; border-radius: 50%; cursor: pointer;
+      color: white; font-size: 1.1rem;
+      box-shadow: var(--shadow-md); transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+    }
+    .scroll-top.visible { opacity: 1; pointer-events: auto; }
+    .scroll-top:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .tools-grid { grid-template-columns: repeat(3, 1fr); }
+      .achievements-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 4%; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; }
+      .hero-text p { margin: 0 auto 2rem; }
+      .hero-cta { justify-content: center; }
+      .hero-photo { order: -1; }
+      .photo-frame { width: 260px; height: 300px; }
+      .floating-tag { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: repeat(2, 1fr); }
+      .services-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+      .edu-grid { grid-template-columns: 1fr; }
+      .achievements-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-item:first-child { grid-column: span 2; }
+      .contact-solo { padding: 0 1rem; }
+      section { padding: 70px 4%; }
+    }
+    @media (max-width: 480px) {
+      .hero { padding: 90px 4% 50px; }
+      .photo-frame { width: 220px; height: 250px; }
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item:first-child { grid-column: span 1; aspect-ratio: 1; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav>
+  <div class="nav-logo">Floymer Bencomo</div>
+  <ul class="nav-links">
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#experiencia">Experiencia</a></li>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#herramientas">Herramientas</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#sobre-mi"    onclick="closeMenu()">Sobre mí</a>
+  <a href="#servicios"   onclick="closeMenu()">Servicios</a>
+  <a href="#experiencia" onclick="closeMenu()">Experiencia</a>
+  <a href="#proyectos"   onclick="closeMenu()">Proyectos</a>
+  <a href="#herramientas" onclick="closeMenu()">Herramientas</a>
+  <a href="#galeria"     onclick="closeMenu()">Galería</a>
+  <a href="#formacion"   onclick="closeMenu()">Formación</a>
+  <a href="#contacto"    onclick="closeMenu()">Contacto</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="inicio">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="badge"><i class="fas fa-star"></i> Portafolio Profesional</div>
+      <h1>Floymer<br/>Bencomo</h1>
+      <p class="subtitle">Coordinadora Administrativa &amp; RRHH · Marketing Digital · Gestión Operativa · Creación de Contenido</p>
+      <p>Profesional multidisciplinaria con experiencia en recursos humanos, administración, operaciones y marketing digital. Especializada en gestión de equipos, creación de contenido, estrategias comerciales y optimización de procesos en entornos gastronómicos y comerciales.</p>
+      <div class="hero-cta">
+        <a href="#contacto" class="btn-primary"><i class="fas fa-envelope"></i> Contáctame</a>
+        <a href="#proyectos" class="btn-secondary"><i class="fas fa-briefcase"></i> Ver proyectos</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="photo-frame">
+        <img src="WhatsApp Image 2026-05-19 at 11.32.23 AM.jpeg" alt="Floymer Bencomo" />
+      </div>
+      <div class="floating-tag"><i class="fas fa-users" style="color:var(--pink-mid)"></i> RRHH &amp; Admin</div>
+      <div class="floating-tag"><i class="fas fa-chart-line"></i> Marketing Digital</div>
+      <div class="floating-tag"><i class="fas fa-utensils"></i> Gastronomía</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOBRE MÍ ===== -->
+<section id="sobre-mi">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">Quién soy</div>
+      <h2 class="section-title">Sobre Mí</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-stats">
+        <div class="stat-card">
+          <span class="stat-number">5+</span>
+          <span class="stat-label">Años de experiencia</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">4</span>
+          <span class="stat-label">Marcas gestionadas</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">3</span>
+          <span class="stat-label">Áreas de expertise</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Compromiso</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <h3>Me apasiona construir, organizar y mejorar todo lo que toco.</h3>
+        <p>Mi experiencia combina pensamiento estratégico, creatividad y gestión operativa, permitiéndome desenvolverme con soltura en áreas administrativas, talento humano y marketing digital.</p>
+        <p>No soy "solo marketing". Soy una mezcla rara y valiosa de habilidades que pocas profesionales combinan: <strong>marketing + RRHH + administración + operaciones + contenido + gastronomía + creatividad</strong>.</p>
+        <p>Cada empresa donde he estado ha encontrado en mí a alguien que resuelve, ejecuta y lidera con resultados medibles.</p>
+        <div class="skill-pills">
+          <span class="pill"><i class="fas fa-users"></i> RRHH</span>
+          <span class="pill"><i class="fas fa-chart-bar"></i> Marketing</span>
+          <span class="pill"><i class="fas fa-cogs"></i> Operaciones</span>
+          <span class="pill"><i class="fas fa-pen"></i> Contenido</span>
+          <span class="pill"><i class="fas fa-calculator"></i> Administración</span>
+          <span class="pill"><i class="fas fa-utensils"></i> Gastronomía</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICIOS ===== -->
+<section id="servicios">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">Lo que ofrezco</div>
+      <h2 class="section-title">Áreas de Expertise</h2>
+      <p class="section-sub">Una combinación única de habilidades que pocas profesionales dominan juntas</p>
+      <div class="divider"></div>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">👥</div>
+        <h3>Recursos Humanos</h3>
+        <ul class="service-list">
+          <li>Reclutamiento y selección</li>
+          <li>Inducción de personal</li>
+          <li>Gestión documental</li>
+          <li>Nómina</li>
+          <li>Control de asistencia</li>
+          <li>Relaciones laborales</li>
+          <li>TSS y procesos administrativos</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">⚙️</div>
+        <h3>Administración y Operaciones</h3>
+        <ul class="service-list">
+          <li>Cuentas por cobrar / pagar</li>
+          <li>Ingresos y egresos</li>
+          <li>Organización documental</li>
+          <li>Supervisión operativa</li>
+          <li>Inventario y proveedores</li>
+          <li>Optimización de procesos</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3>Marketing Digital</h3>
+        <ul class="service-list">
+          <li>Gestión de redes sociales</li>
+          <li>Estrategias promocionales</li>
+          <li>Copywriting</li>
+          <li>Diseño en Canva Pro</li>
+          <li>Edición con CapCut</li>
+          <li>After Effects (básico)</li>
+          <li>Campañas y análisis</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🎨</div>
+        <h3>Creación de Contenido</h3>
+        <ul class="service-list">
+          <li>Reels y videos</li>
+          <li>Flyers y publicidad</li>
+          <li>Menús digitales</li>
+          <li>Estrategia editorial</li>
+          <li>Branding visual</li>
+          <li>Contenido gastronómico</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🍽️</div>
+        <h3>Sector Gastronómico</h3>
+        <ul class="service-list">
+          <li>Coordinación de eventos</li>
+          <li>Campañas de temporada</li>
+          <li>Estrategias de captación</li>
+          <li>Marketing de restaurantes</li>
+          <li>Gestión de food parks</li>
+          <li>Lanzamientos</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">💼</div>
+        <h3>Ventas y Atención</h3>
+        <ul class="service-list">
+          <li>Estrategias comerciales</li>
+          <li>Atención al cliente</li>
+          <li>Gestión de inventario</li>
+          <li>Coordinación de ventas</li>
+          <li>Fidelización de clientes</li>
+          <li>Reportes de gestión</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPERIENCIA ===== -->
+<section id="experiencia">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">Trayectoria</div>
+      <h2 class="section-title">Experiencia Laboral</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div>
+              <h3>Coordinadora Administrativa y RRHH</h3>
+              <div class="company">Chicken Rooming SRL</div>
+            </div>
+            <span class="period-badge">Reciente</span>
+          </div>
+          <div class="exp-tasks">
+            <span class="task-tag">Gestión de nómina</span>
+            <span class="task-tag">Reclutamiento y selección</span>
+            <span class="task-tag">Supervisión de personal</span>
+            <span class="task-tag">Organización operativa</span>
+            <span class="task-tag">Procesos laborales</span>
+            <span class="task-tag">Coordinación administrativa</span>
+            <span class="task-tag">TSS</span>
+            <span class="task-tag">Control documental</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div>
+              <h3>Encargada de Ventas y Redes Sociales</h3>
+              <div class="company">Electromuebles Kewrys</div>
+            </div>
+            <span class="period-badge">Anterior</span>
+          </div>
+          <div class="exp-tasks">
+            <span class="task-tag">Creación de contenido</span>
+            <span class="task-tag">Manejo de redes sociales</span>
+            <span class="task-tag">Atención al cliente</span>
+            <span class="task-tag">Estrategias promocionales</span>
+            <span class="task-tag">Control de inventario</span>
+            <span class="task-tag">Coordinación de ventas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div>
+              <h3>Gestión de Marketing &amp; Operaciones</h3>
+              <div class="company">Marcas Gastronómicas (El Patio · Callejuela · Mofongon)</div>
+            </div>
+            <span class="period-badge">Proyectos</span>
+          </div>
+          <div class="exp-tasks">
+            <span class="task-tag">Campañas promocionales</span>
+            <span class="task-tag">Marketing de contenidos</span>
+            <span class="task-tag">Diseño de flyers</span>
+            <span class="task-tag">Estrategias de captación</span>
+            <span class="task-tag">Eventos y lanzamientos</span>
+            <span class="task-tag">Copywriting</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div>
+              <h3>Estrategia Digital y Posicionamiento</h3>
+              <div class="company">INSAPROMA</div>
+            </div>
+            <span class="period-badge">Proyecto</span>
+          </div>
+          <div class="exp-tasks">
+            <span class="task-tag">Estrategia digital</span>
+            <span class="task-tag">Posicionamiento de marca</span>
+            <span class="task-tag">Creación de contenido</span>
+            <span class="task-tag">Redes sociales</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROYECTOS ===== -->
+<section id="proyectos">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">Portafolio</div>
+      <h2 class="section-title">Proyectos Realizados</h2>
+      <p class="section-sub">Marcas y empresas donde he dejado huella con estrategia, creatividad y resultados</p>
+      <div class="divider"></div>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-thumb project-thumb-1">🍽️</div>
+        <div class="project-body">
+          <h3>El Patio Food Park</h3>
+          <p>Gestión integral de marketing digital para el food park: campañas promocionales de temporada, estrategias de cumpleaños, coordinación de eventos especiales y publicidad gastronómica de alto impacto.</p>
+          <div class="project-tags">
+            <span class="project-tag">Campañas</span>
+            <span class="project-tag">Eventos</span>
+            <span class="project-tag">Copywriting</span>
+            <span class="project-tag">Diseño</span>
+            <span class="project-tag">Food Park</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb project-thumb-2">🥘</div>
+        <div class="project-body">
+          <h3>Callejuela</h3>
+          <p>Desarrollo de estrategia de branding comercial y campañas de captación de nuevos clientes. Diseño de piezas visuales y gestión de contenido en redes sociales para posicionamiento de la marca.</p>
+          <div class="project-tags">
+            <span class="project-tag">Branding</span>
+            <span class="project-tag">Captación</span>
+            <span class="project-tag">Promociones</span>
+            <span class="project-tag">Redes sociales</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb project-thumb-3">🍌</div>
+        <div class="project-body">
+          <h3>Mofongon</h3>
+          <p>Creación de campañas 2x1, lanzamientos de nuevos productos y contenido gastronómico especializado. Estrategias de engagement y publicaciones optimizadas para incrementar la visibilidad de la marca.</p>
+          <div class="project-tags">
+            <span class="project-tag">Campañas 2x1</span>
+            <span class="project-tag">Lanzamientos</span>
+            <span class="project-tag">Contenido</span>
+            <span class="project-tag">Engagement</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb project-thumb-4">📊</div>
+        <div class="project-body">
+          <h3>INSAPROMA</h3>
+          <p>Implementación de estrategia digital integral enfocada en posicionamiento y crecimiento orgánico. Creación de contenido alineado con los valores de la organización y gestión de presencia en redes.</p>
+          <div class="project-tags">
+            <span class="project-tag">Estrategia digital</span>
+            <span class="project-tag">Posicionamiento</span>
+            <span class="project-tag">Contenido</span>
+            <span class="project-tag">Crecimiento orgánico</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALERÍA ===== -->
+<section id="galeria">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">Visual</div>
+      <h2 class="section-title">Galería de Trabajos</h2>
+      <p class="section-sub">Posts, reels, flyers, campañas y diseños que hablan por sí solos</p>
+      <div class="divider"></div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <i class="fas fa-image"></i>
+          <span>Banner / Post Destacado</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <i class="fas fa-film"></i>
+          <span>Reel</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <i class="fas fa-palette"></i>
+          <span>Flyer Promocional</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <i class="fas fa-utensils"></i>
+          <span>Menú Digital</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <i class="fas fa-star"></i>
+          <span>Campaña Especial</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <i class="fas fa-chart-pie"></i>
+          <span>Resultados / Métricas</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <i class="fas fa-birthday-cake"></i>
+          <span>Promo Cumpleaños</span>
+        </div>
+      </div>
+    </div>
+    <p class="gallery-upload-hint">
+      <i class="fas fa-info-circle"></i>
+      Agrega tus imágenes reemplazando los placeholders con tus capturas de posts, reels y campañas.
+    </p>
+  </div>
+</section>
+
+<!-- ===== HERRAMIENTAS ===== -->
+<section id="herramientas">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">Stack</div>
+      <h2 class="section-title">Herramientas que manejo</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <span class="tool-icon">🎨</span>
+        <span class="tool-name">Canva Pro</span>
+        <span class="tool-level">Diseño gráfico</span>
+        <div class="tool-bar"><div class="tool-bar-fill" style="width:95%"></div></div>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">🎬</span>
+        <span class="tool-name">CapCut</span>
+        <span class="tool-level">Edición de video</span>
+        <div class="tool-bar"><div class="tool-bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">✨</span>
+        <span class="tool-name">After Effects</span>
+        <span class="tool-level">Animación básica</span>
+        <div class="tool-bar"><div class="tool-bar-fill" style="width:55%"></div></div>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">🖼️</span>
+        <span class="tool-name">Photoshop</span>
+        <span class="tool-level">Edición de imágenes</span>
+        <div class="tool-bar"><div class="tool-bar-fill" style="width:70%"></div></div>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">📊</span>
+        <span class="tool-name">Excel</span>
+        <span class="tool-level">Gestión de datos</span>
+        <div class="tool-bar"><div class="tool-bar-fill" style="width:88%"></div></div>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">💼</span>
+        <span class="tool-name">Office 365</span>
+        <span class="tool-level">Suite completa</span>
+        <div class="tool-bar"><div class="tool-bar-fill" style="width:92%"></div></div>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">🌐</span>
+        <span class="tool-name">WordPress</span>
+        <span class="tool-level">Gestión web</span>
+        <div class="tool-bar"><div class="tool-bar-fill" style="width:65%"></div></div>
+      </div>
+      <div class="tool-card">
+        <span class="tool-icon">📁</span>
+        <span class="tool-name">Google Workspace</span>
+        <span class="tool-level">Colaboración</span>
+        <div class="tool-bar"><div class="tool-bar-fill" style="width:93%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FORMACIÓN ===== -->
+<section id="formacion">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">Educación</div>
+      <h2 class="section-title">Formación Académica</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-icon"><i class="fas fa-graduation-cap"></i></div>
+        <div class="edu-body">
+          <h4>Diplomado en Marketing Digital y Contenido</h4>
+          <p>Estrategias digitales, creación de contenido, gestión de redes sociales y publicidad online.</p>
+        </div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-icon"><i class="fas fa-globe"></i></div>
+        <div class="edu-body">
+          <h4>Diplomado en Comercio Internacional y Operaciones Aduanales</h4>
+          <p>Comercio exterior, logística internacional y gestión de operaciones aduanales.</p>
+        </div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-icon"><i class="fas fa-heart"></i></div>
+        <div class="edu-body">
+          <h4>Curso: Educación Inclusiva</h4>
+          <p>Formación complementaria en inclusión y diversidad en entornos educativos y laborales.</p>
+        </div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-icon"><i class="fas fa-brain"></i></div>
+        <div class="edu-body">
+          <h4>Curso: Autocontrol Emocional</h4>
+          <p>Desarrollo de inteligencia emocional para entornos profesionales de alta demanda.</p>
+        </div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-icon"><i class="fas fa-book-open"></i></div>
+        <div class="edu-body">
+          <h4>Curso: Lectoescritura Avanzada</h4>
+          <p>Perfeccionamiento en comunicación escrita aplicada a entornos profesionales y de contenido.</p>
+        </div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-icon"><i class="fas fa-certificate"></i></div>
+        <div class="edu-body">
+          <h4>Formación Complementaria Continua</h4>
+          <p>Talleres y cursos adicionales de desarrollo profesional en áreas de gestión y creatividad.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LOGROS ===== -->
+<section id="logros">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">Resultados</div>
+      <h2 class="section-title">Logros &amp; Resultados</h2>
+      <p class="section-sub">Impacto medible en cada organización donde he colaborado</p>
+      <div class="divider"></div>
+    </div>
+    <div class="achievements-grid">
+      <div class="achievement-card">
+        <span class="achievement-icon">📈</span>
+        <h4>Gestión Multimarca</h4>
+        <p>Administración simultánea de múltiples marcas gastronómicas con estrategias de marketing diferenciadas para cada una.</p>
+      </div>
+      <div class="achievement-card">
+        <span class="achievement-icon">👥</span>
+        <h4>Gestión de Personal</h4>
+        <p>Reclutamiento, inducción y administración eficiente de personal operativo en entornos de alta rotación.</p>
+      </div>
+      <div class="achievement-card">
+        <span class="achievement-icon">🎯</span>
+        <h4>Campañas Exitosas</h4>
+        <p>Desarrollo e implementación de campañas promocionales que incrementaron el tráfico y las ventas en cada establecimiento.</p>
+      </div>
+      <div class="achievement-card">
+        <span class="achievement-icon">📱</span>
+        <h4>Contenido de Impacto</h4>
+        <p>Creación de contenido comercial de alta calidad para múltiples plataformas digitales con consistencia de marca.</p>
+      </div>
+      <div class="achievement-card">
+        <span class="achievement-icon">🏢</span>
+        <h4>Perfil Multifuncional Único</h4>
+        <p>Experiencia simultánea y probada en RRHH, marketing y operaciones: tres áreas que pocas profesionales dominan juntas.</p>
+      </div>
+      <div class="achievement-card">
+        <span class="achievement-icon">⚡</span>
+        <h4>Optimización de Procesos</h4>
+        <p>Implementación de mejoras operativas y administrativas que aumentaron la eficiencia en los equipos de trabajo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACTO ===== -->
+<section id="contacto">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag" style="background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);color:white;">Hablemos</div>
+      <h2 class="section-title">Contacto</h2>
+      <p class="section-sub">¿Listo/a para trabajar juntos? Escríbeme y hagamos que suceda.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="contact-solo">
+      <h3>¡Trabajemos juntos!</h3>
+      <div class="contact-items">
+        <a href="tel:+18492799533" class="contact-item">
+          <div class="ci-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <div class="ci-label">Teléfono / WhatsApp</div>
+            <div class="ci-value">(849) 279-9533</div>
+          </div>
+        </a>
+        <a href="https://wa.me/18492799533" target="_blank" class="contact-item">
+          <div class="ci-icon"><i class="fab fa-whatsapp"></i></div>
+          <div>
+            <div class="ci-label">WhatsApp</div>
+            <div class="ci-value">Escríbeme directo</div>
+          </div>
+        </a>
+        <a href="mailto:floymer@email.com" class="contact-item">
+          <div class="ci-icon"><i class="fas fa-envelope"></i></div>
+          <div>
+            <div class="ci-label">Correo electrónico</div>
+            <div class="ci-value">floymer@email.com</div>
+          </div>
+        </a>
+        <a href="#" class="contact-item">
+          <div class="ci-icon"><i class="fab fa-instagram"></i></div>
+          <div>
+            <div class="ci-label">Instagram profesional</div>
+            <div class="ci-value">@floymer.bencomo</div>
+          </div>
+        </a>
+        <a href="#" class="contact-item">
+          <div class="ci-icon"><i class="fab fa-linkedin"></i></div>
+          <div>
+            <div class="ci-label">LinkedIn</div>
+            <div class="ci-value">Floymer Bencomo</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>© 2025 <span>Floymer Bencomo</span> · Todos los derechos reservados · Hecho con 💗</p>
+</footer>
+
+<!-- Scroll to top button -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Volver arriba">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<script>
+  /* ===== MOBILE MENU ===== */
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  /* ===== SCROLL TO TOP ===== */
+  const scrollBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    scrollBtn.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  /* ===== ACTIVE NAV LINK ===== */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => observer.observe(s));
+
+  /* ===== ANIMATE TOOL BARS ON SCROLL ===== */
+  const fills = document.querySelectorAll('.tool-bar-fill');
+  const widths = Array.from(fills).map(f => f.style.width);
+  fills.forEach(f => f.style.width = '0');
+  const toolsSection = document.getElementById('herramientas');
+  const toolsObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      fills.forEach((f, i) => { f.style.width = widths[i]; });
+      toolsObserver.disconnect();
+    }
+  }, { threshold: 0.3 });
+  toolsSection && toolsObserver.observe(toolsSection);
+
+/* ===== FADE IN ON SCROLL ===== */
+  const fadeEls = document.querySelectorAll('.service-card, .project-card, .tool-card, .edu-card, .achievement-card, .timeline-card, .stat-card');
+  fadeEls.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = el.style.transform + ' translateY(20px)';
+    el.style.transition = 'opacity .6s ease, transform .6s ease, box-shadow .35s ease';
+  });
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => {
+          e.target.style.opacity = '1';
+          e.target.style.transform = e.target.style.transform.replace('translateY(20px)', 'translateY(0)');
+        }, 80);
+        fadeObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  fadeEls.forEach(el => fadeObserver.observe(el));
+</script>
+</body>
+</html>
