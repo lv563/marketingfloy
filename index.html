@@ -621,6 +621,50 @@
       .gallery-item:first-child { grid-column: span 1; aspect-ratio: 1; }
       .about-stats { grid-template-columns: 1fr 1fr; }
     }
+
+    /* ===== CONTACT FORM ===== */
+    .contact-form-wrapper { margin-top: 2rem; }
+    .contact-input {
+      background: rgba(255,255,255,.15);
+      border: 1.5px solid rgba(255,255,255,.3);
+      border-radius: var(--radius-sm);
+      color: white;
+      padding: .75rem 1rem;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: .9rem;
+      outline: none;
+      transition: border var(--transition), background var(--transition);
+    }
+    .contact-input::placeholder { color: rgba(255,255,255,.6); }
+    .contact-input:focus { border-color: var(--yellow-light); background: rgba(255,255,255,.22); }
+    textarea.contact-input { resize: vertical; min-height: 110px; }
+    .cf-btn {
+      display: flex; align-items: center; justify-content: center; gap: .6rem;
+      width: 100%; padding: .9rem;
+      background: linear-gradient(135deg, var(--yellow-mid), #FACC15);
+      color: var(--gray-800); font-weight: 700; font-size: .95rem;
+      border: none; border-radius: 100px; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(250,204,21,.4);
+      transition: var(--transition); margin-top: .5rem;
+    }
+    .cf-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(250,204,21,.5); }
+    .cf-btn:disabled { opacity: .7; cursor: not-allowed; }
+    .cf-result {
+      padding: .8rem 1.2rem; border-radius: var(--radius-sm);
+      font-size: .87rem; font-weight: 600; margin-top: .75rem;
+      display: none; text-align: left;
+    }
+    .cf-result.success { background: rgba(255,255,255,.2); color: var(--yellow-light); display: block; }
+    .cf-result.error   { background: rgba(255,80,80,.25); color: #FFD0D0; display: block; }
+
+    /* ===== GALLERY DYNAMIC IMAGES ===== */
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-img-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,.5); color: white;
+      padding: .4rem .7rem; font-size: .75rem; font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -655,18 +699,19 @@
 <section class="hero" id="inicio">
   <div class="hero-inner">
     <div class="hero-text">
-      <div class="badge"><i class="fas fa-star"></i> Portafolio Profesional</div>
-      <h1>Floymer<br/>Bencomo</h1>
-      <p class="subtitle">Coordinadora Administrativa &amp; RRHH · Marketing Digital · Gestión Operativa · Creación de Contenido</p>
-      <p>Profesional multidisciplinaria con experiencia en recursos humanos, administración, operaciones y marketing digital. Especializada en gestión de equipos, creación de contenido, estrategias comerciales y optimización de procesos en entornos gastronómicos y comerciales.</p>
+      <div class="badge" data-content-key="hero.badge" data-content-type="text"><i class="fas fa-star"></i> Portafolio Profesional</div>
+      <h1 data-content-key="hero.name" data-content-type="html">Floymer<br/>Bencomo</h1>
+      <p class="subtitle" data-content-key="hero.subtitle" data-content-type="text">Coordinadora Administrativa &amp; RRHH · Marketing Digital · Gestión Operativa · Creación de Contenido</p>
+      <p data-content-key="hero.description" data-content-type="text">Profesional multidisciplinaria con experiencia en recursos humanos, administración, operaciones y marketing digital. Especializada en gestión de equipos, creación de contenido, estrategias comerciales y optimización de procesos en entornos gastronómicos y comerciales.</p>
       <div class="hero-cta">
         <a href="#contacto" class="btn-primary"><i class="fas fa-envelope"></i> Contáctame</a>
         <a href="#proyectos" class="btn-secondary"><i class="fas fa-briefcase"></i> Ver proyectos</a>
       </div>
     </div>
     <div class="hero-photo">
-      <div class="photo-frame">
-        <img src="WhatsApp Image 2026-05-19 at 11.32.23 AM.jpeg" alt="Floymer Bencomo" />
+      <div class="photo-frame" style="cursor:pointer;" onclick="adminPhotoClick()" title="">
+        <img src="WhatsApp Image 2026-05-19 at 11.32.23 AM.jpeg" alt="Floymer Bencomo"
+             data-content-key="hero.photo" data-content-type="image" id="hero-photo-img" />
       </div>
       <div class="floating-tag"><i class="fas fa-users" style="color:var(--pink-mid)"></i> RRHH &amp; Admin</div>
       <div class="floating-tag"><i class="fas fa-chart-line"></i> Marketing Digital</div>
@@ -686,27 +731,27 @@
     <div class="about-grid">
       <div class="about-stats">
         <div class="stat-card">
-          <span class="stat-number">5+</span>
-          <span class="stat-label">Años de experiencia</span>
+          <span class="stat-number" data-content-key="about.stat1.number" data-content-type="text">5+</span>
+          <span class="stat-label" data-content-key="about.stat1.label" data-content-type="text">Años de experiencia</span>
         </div>
         <div class="stat-card">
-          <span class="stat-number">4</span>
-          <span class="stat-label">Marcas gestionadas</span>
+          <span class="stat-number" data-content-key="about.stat2.number" data-content-type="text">4</span>
+          <span class="stat-label" data-content-key="about.stat2.label" data-content-type="text">Marcas gestionadas</span>
         </div>
         <div class="stat-card">
-          <span class="stat-number">3</span>
-          <span class="stat-label">Áreas de expertise</span>
+          <span class="stat-number" data-content-key="about.stat3.number" data-content-type="text">3</span>
+          <span class="stat-label" data-content-key="about.stat3.label" data-content-type="text">Áreas de expertise</span>
         </div>
         <div class="stat-card">
-          <span class="stat-number">100%</span>
-          <span class="stat-label">Compromiso</span>
+          <span class="stat-number" data-content-key="about.stat4.number" data-content-type="text">100%</span>
+          <span class="stat-label" data-content-key="about.stat4.label" data-content-type="text">Compromiso</span>
         </div>
       </div>
       <div class="about-text">
-        <h3>Me apasiona construir, organizar y mejorar todo lo que toco.</h3>
-        <p>Mi experiencia combina pensamiento estratégico, creatividad y gestión operativa, permitiéndome desenvolverme con soltura en áreas administrativas, talento humano y marketing digital.</p>
-        <p>No soy "solo marketing". Soy una mezcla rara y valiosa de habilidades que pocas profesionales combinan: <strong>marketing + RRHH + administración + operaciones + contenido + gastronomía + creatividad</strong>.</p>
-        <p>Cada empresa donde he estado ha encontrado en mí a alguien que resuelve, ejecuta y lidera con resultados medibles.</p>
+        <h3 data-content-key="about.heading" data-content-type="text">Me apasiona construir, organizar y mejorar todo lo que toco.</h3>
+        <p data-content-key="about.p1" data-content-type="text">Mi experiencia combina pensamiento estratégico, creatividad y gestión operativa, permitiéndome desenvolverme con soltura en áreas administrativas, talento humano y marketing digital.</p>
+        <p data-content-key="about.p2" data-content-type="text">No soy "solo marketing". Soy una mezcla rara y valiosa de habilidades que pocas profesionales combinan: <strong>marketing + RRHH + administración + operaciones + contenido + gastronomía + creatividad</strong>.</p>
+        <p data-content-key="about.p3" data-content-type="text">Cada empresa donde he estado ha encontrado en mí a alguien que resuelve, ejecuta y lidera con resultados medibles.</p>
         <div class="skill-pills">
           <span class="pill"><i class="fas fa-users"></i> RRHH</span>
           <span class="pill"><i class="fas fa-chart-bar"></i> Marketing</span>
@@ -1217,7 +1262,7 @@
           <div class="ci-icon"><i class="fas fa-phone"></i></div>
           <div>
             <div class="ci-label">Teléfono / WhatsApp</div>
-            <div class="ci-value">(849) 279-9533</div>
+            <div class="ci-value" data-content-key="contact.phone" data-content-type="text">(849) 279-9533</div>
           </div>
         </a>
         <a href="https://wa.me/18492799533" target="_blank" class="contact-item">
@@ -1231,30 +1276,52 @@
           <div class="ci-icon"><i class="fas fa-envelope"></i></div>
           <div>
             <div class="ci-label">Correo electrónico</div>
-            <div class="ci-value">floymer@email.com</div>
+            <div class="ci-value" data-content-key="contact.email" data-content-type="text">floymer@email.com</div>
           </div>
         </a>
         <a href="#" class="contact-item">
           <div class="ci-icon"><i class="fab fa-instagram"></i></div>
           <div>
             <div class="ci-label">Instagram profesional</div>
-            <div class="ci-value">@floymer.bencomo</div>
+            <div class="ci-value" data-content-key="contact.instagram" data-content-type="text">@floymer.bencomo</div>
           </div>
         </a>
         <a href="#" class="contact-item">
           <div class="ci-icon"><i class="fab fa-linkedin"></i></div>
           <div>
             <div class="ci-label">LinkedIn</div>
-            <div class="ci-value">Floymer Bencomo</div>
+            <div class="ci-value" data-content-key="contact.linkedin" data-content-type="text">Floymer Bencomo</div>
           </div>
         </a>
+      </div>
+
+      <!-- Formulario de contacto -->
+      <div class="contact-form-wrapper">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:white;margin-bottom:1.2rem;">
+          ✉️ Envíame un mensaje directo
+        </h3>
+        <form id="contactForm" onsubmit="submitContact(event)" novalidate>
+          <div style="margin-bottom:.85rem;">
+            <input type="text" id="cf-nombre" class="contact-input" placeholder="Tu nombre completo" required />
+          </div>
+          <div style="margin-bottom:.85rem;">
+            <input type="email" id="cf-email" class="contact-input" placeholder="Tu correo electrónico" required />
+          </div>
+          <div style="margin-bottom:.85rem;">
+            <textarea id="cf-mensaje" class="contact-input" placeholder="Cuéntame en qué puedo ayudarte…" required></textarea>
+          </div>
+          <button type="submit" id="cf-btn" class="cf-btn">
+            <i class="fas fa-paper-plane"></i> Enviar mensaje
+          </button>
+          <div id="cf-result" class="cf-result"></div>
+        </form>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===== FOOTER ===== -->
-<footer>
+<footer ondblclick="showLoginModal()" title="" style="cursor:default;">
   <p>© 2025 <span>Floymer Bencomo</span> · Todos los derechos reservados · Hecho con 💗</p>
 </footer>
 
@@ -1263,7 +1330,128 @@
   <i class="fas fa-arrow-up"></i>
 </button>
 
+<!-- ===== ADMIN BAR (oculta hasta login) ===== -->
+<div id="admin-bar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;
+  background:rgba(236,72,153,.92);backdrop-filter:blur(8px);
+  padding:.55rem 1.5rem;display:none;align-items:center;justify-content:space-between;
+  font-size:.82rem;font-weight:600;color:white;box-shadow:0 2px 12px rgba(236,72,153,.4);">
+  <span>✏️ Modo edición activo — haz <strong>hover</strong> sobre cualquier elemento para editarlo</span>
+  <div style="display:flex;gap:.8rem;align-items:center;">
+    <span id="admin-bar-user" style="opacity:.8;font-weight:400;"></span>
+    <button onclick="adminLogout()" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);
+      color:white;border-radius:100px;padding:.25rem .85rem;font-size:.78rem;cursor:pointer;">
+      Salir
+    </button>
+  </div>
+</div>
+
+<!-- ===== MODAL LOGIN ===== -->
+<div id="login-modal" style="display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;padding:2.5rem;width:min(380px,90vw);
+    box-shadow:0 24px 80px rgba(0,0,0,.3);position:relative;">
+    <button onclick="hideLoginModal()" style="position:absolute;top:1rem;right:1rem;
+      background:none;border:none;font-size:1.3rem;cursor:pointer;color:#9CA3AF;">✕</button>
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="width:56px;height:56px;background:linear-gradient(135deg,#EC4899,#BE185D);
+        border-radius:50%;display:flex;align-items:center;justify-content:center;
+        margin:0 auto .8rem;font-size:1.5rem;">🔒</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;
+        color:#BE185D;margin:0 0 .3rem;">Panel de Administración</h3>
+      <p style="font-size:.82rem;color:#6B7280;margin:0;">MarketingFloy</p>
+    </div>
+    <div id="login-error" style="display:none;background:#FEF2F2;border:1px solid #FCA5A5;
+      border-radius:8px;padding:.6rem 1rem;font-size:.82rem;color:#DC2626;margin-bottom:1rem;"></div>
+    <div style="margin-bottom:1rem;">
+      <label style="display:block;font-size:.8rem;font-weight:600;color:#374151;margin-bottom:.4rem;">Usuario</label>
+      <input id="login-user" type="text" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"
+        style="width:100%;padding:.7rem 1rem;border:1.5px solid #E5E7EB;border-radius:10px;
+        font-size:.9rem;outline:none;box-sizing:border-box;" />
+    </div>
+    <div style="margin-bottom:1.5rem;">
+      <label style="display:block;font-size:.8rem;font-weight:600;color:#374151;margin-bottom:.4rem;">Contraseña</label>
+      <input id="login-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"
+        style="width:100%;padding:.7rem 1rem;border:1.5px solid #E5E7EB;border-radius:10px;
+        font-size:.9rem;outline:none;box-sizing:border-box;" />
+    </div>
+    <button onclick="doLogin()" id="login-btn"
+      style="width:100%;padding:.85rem;background:linear-gradient(135deg,#EC4899,#BE185D);
+      color:white;border:none;border-radius:100px;font-weight:700;font-size:.95rem;
+      cursor:pointer;box-shadow:0 4px 16px rgba(236,72,153,.35);">
+      Ingresar
+    </button>
+  </div>
+</div>
+
+<!-- ===== MODAL EDITOR INLINE ===== -->
+<div id="edit-modal" style="display:none;position:fixed;z-index:10001;
+  background:white;border-radius:16px;padding:1.5rem;width:min(420px,92vw);
+  box-shadow:0 20px 60px rgba(0,0,0,.25);border:2px solid #F9A8D4;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+    <div>
+      <div style="font-size:.7rem;color:#EC4899;font-weight:700;text-transform:uppercase;
+        letter-spacing:.06em;margin-bottom:.2rem;">Editando campo</div>
+      <div id="edit-modal-key" style="font-size:.82rem;color:#6B7280;font-family:monospace;"></div>
+    </div>
+    <button onclick="closeEditor()" style="background:#FFE4F0;border:none;border-radius:50%;
+      width:32px;height:32px;cursor:pointer;font-size:1rem;color:#EC4899;">✕</button>
+  </div>
+  <!-- Text editor -->
+  <div id="edit-text-area" style="display:none;">
+    <textarea id="edit-textarea" rows="4"
+      style="width:100%;padding:.8rem;border:1.5px solid #F9A8D4;border-radius:10px;
+      font-size:.9rem;font-family:'Inter',sans-serif;outline:none;resize:vertical;
+      box-sizing:border-box;color:#1F2937;"></textarea>
+    <div style="font-size:.75rem;color:#9CA3AF;margin-top:.3rem;">
+      HTML permitido para campos tipo <code>html</code>
+    </div>
+  </div>
+  <!-- Image editor -->
+  <div id="edit-image-area" style="display:none;">
+    <div id="edit-img-preview" style="width:100%;height:160px;border-radius:10px;overflow:hidden;
+      background:#FFE4F0;margin-bottom:.8rem;display:flex;align-items:center;justify-content:center;">
+      <img id="edit-img-preview-img" src="" style="width:100%;height:100%;object-fit:cover;display:none;" />
+      <span id="edit-img-preview-placeholder" style="color:#EC4899;font-size:.85rem;">Vista previa</span>
+    </div>
+    <label style="display:flex;align-items:center;justify-content:center;gap:.5rem;
+      padding:.8rem;background:#FFE4F0;border:2px dashed #F9A8D4;border-radius:10px;
+      cursor:pointer;color:#EC4899;font-weight:600;font-size:.85rem;">
+      <i class="fas fa-camera"></i> Seleccionar imagen
+      <input type="file" id="edit-img-input" accept="image/*" style="display:none;"
+        onchange="previewImageEdit(event)" />
+    </label>
+  </div>
+  <div style="display:flex;gap:.7rem;margin-top:1.2rem;">
+    <button onclick="saveEdit()" id="edit-save-btn"
+      style="flex:1;padding:.75rem;background:linear-gradient(135deg,#EC4899,#BE185D);
+      color:white;border:none;border-radius:100px;font-weight:700;cursor:pointer;font-size:.88rem;">
+      <i class="fas fa-check"></i> Guardar
+    </button>
+    <button onclick="closeEditor()"
+      style="padding:.75rem 1.2rem;background:#F3F4F6;border:none;border-radius:100px;
+      font-weight:600;cursor:pointer;font-size:.88rem;color:#6B7280;">
+      Cancelar
+    </button>
+  </div>
+</div>
+
+<!-- ===== CHIP LOGOUT (visible solo en modo admin) ===== -->
+<div id="logout-chip" style="display:none;position:fixed;bottom:5.5rem;left:1.5rem;z-index:9998;
+  background:linear-gradient(135deg,#EC4899,#BE185D);color:white;border:none;border-radius:100px;
+  padding:.5rem 1.1rem;font-size:.78rem;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 16px rgba(236,72,153,.4);" onclick="adminLogout()">
+  🔓 Salir del modo edición
+</div>
+
 <script>
+  /* ===== CONFIGURACIÓN DE API =====
+     Cambia esta URL a la dirección donde corre tu ApiService.
+     • Con Aspire (AppHost): mira el Aspire Dashboard para el puerto del 'apiservice'
+     • Sin Aspire (dotnet run directo desde MarketingFloy.ApiService): http://localhost:5419
+  */
+  const API_BASE = 'http://localhost:5419';
+
   /* ===== MOBILE MENU ===== */
   function toggleMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
@@ -1324,6 +1512,344 @@
     });
   }, { threshold: 0.12 });
   fadeEls.forEach(el => fadeObserver.observe(el));
+
+  /* ===== GALERÍA DINÁMICA ===== */
+  async function loadGallery() {
+    try {
+      const res = await fetch(API_BASE + '/api/gallery');
+      if (!res.ok) return;
+      const images = await res.json();
+      if (!images || images.length === 0) return;
+
+      const grid = document.querySelector('.gallery-grid');
+      grid.innerHTML = '';
+      images.forEach((img, i) => {
+        const div = document.createElement('div');
+        div.className = 'gallery-item';
+        div.style.position = 'relative';
+        if (i === 0) { div.style.gridColumn = 'span 2'; div.style.aspectRatio = '2/1'; }
+
+        const imgEl = document.createElement('img');
+        imgEl.src = API_BASE + img.urlImagen;
+        imgEl.alt = img.titulo;
+
+        const cap = document.createElement('div');
+        cap.className = 'gallery-img-caption';
+        cap.textContent = img.titulo;
+
+        div.appendChild(imgEl);
+        div.appendChild(cap);
+
+        div.addEventListener('click', () => window.open(API_BASE + img.urlImagen, '_blank'));
+        grid.appendChild(div);
+      });
+    } catch { /* mantiene los placeholders estáticos */ }
+  }
+  loadGallery();
+
+  /* ===== FORMULARIO DE CONTACTO ===== */
+  async function submitContact(e) {
+    e.preventDefault();
+    const btn = document.getElementById('cf-btn');
+    const result = document.getElementById('cf-result');
+    result.className = 'cf-result';
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
+
+    try {
+      const res = await fetch(API_BASE + '/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: document.getElementById('cf-nombre').value.trim(),
+          email:   document.getElementById('cf-email').value.trim(),
+          mensaje: document.getElementById('cf-mensaje').value.trim()
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        result.textContent = '✅ ' + (data.message || '¡Mensaje enviado!');
+        result.className = 'cf-result success';
+        document.getElementById('contactForm').reset();
+      } else {
+        result.textContent = '⚠️ ' + (data.error || 'Error al enviar.');
+        result.className = 'cf-result error';
+      }
+    } catch {
+      result.textContent = '⚠️ No se pudo conectar con el servidor. Escríbeme directamente por WhatsApp.';
+      result.className = 'cf-result error';
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar mensaje';
+    }
+  }
+
+  /* ===== REGISTRO DE VISITA ===== */
+  (async () => {
+    try {
+      await fetch(API_BASE + '/api/visits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pagina: window.location.href })
+      });
+    } catch { /* silencioso */ }
+  })();
+
+  /* ══════════════════════════════════════════════════════════════════
+     SISTEMA DE EDICIÓN INLINE — ADMIN
+  ══════════════════════════════════════════════════════════════════ */
+
+  // ── Carga de contenido dinámico desde API ───────────────────────
+  async function loadContentFromApi() {
+    try {
+      const res = await fetch(API_BASE + '/api/content');
+      if (!res.ok) return;
+      const items = await res.json();
+      items.forEach(item => {
+        document.querySelectorAll(`[data-content-key="${item.key}"]`).forEach(el => {
+          applyContent(el, item.value, item.type);
+        });
+      });
+    } catch { /* usa los valores por defecto del HTML */ }
+  }
+
+  function applyContent(el, value, type) {
+    if (type === 'image') {
+      const img = el.tagName === 'IMG' ? el : el.querySelector('img');
+      if (img) img.src = value.startsWith('/') ? API_BASE + value : value;
+    } else if (type === 'html') {
+      el.innerHTML = value;
+    } else {
+      el.textContent = value;
+    }
+    el.dataset.contentOriginal = value;
+  }
+
+  loadContentFromApi();
+
+  // ── Login / Logout ──────────────────────────────────────────────
+  function showLoginModal() {
+    document.getElementById('login-modal').style.display = 'flex';
+    setTimeout(() => document.getElementById('login-user').focus(), 100);
+  }
+  function hideLoginModal() {
+    document.getElementById('login-modal').style.display = 'none';
+    document.getElementById('login-error').style.display = 'none';
+  }
+  document.getElementById('login-modal').addEventListener('click', function(e) {
+    if (e.target === this) hideLoginModal();
+  });
+
+  async function doLogin() {
+    const btn = document.getElementById('login-btn');
+    const errEl = document.getElementById('login-error');
+    const user = document.getElementById('login-user').value.trim();
+    const pass = document.getElementById('login-pass').value;
+    errEl.style.display = 'none';
+    if (!user || !pass) { errEl.textContent = 'Completa usuario y contraseña.'; errEl.style.display = 'block'; return; }
+    btn.textContent = 'Ingresando...';
+    btn.disabled = true;
+    try {
+      const res = await fetch(API_BASE + '/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user, password: pass })
+      });
+      if (!res.ok) throw new Error('Credenciales incorrectas.');
+      const data = await res.json();
+      localStorage.setItem('admin_token', data.token);
+      localStorage.setItem('admin_username', data.username);
+      hideLoginModal();
+      activateAdminMode(data.token, data.username);
+    } catch (e) {
+      errEl.textContent = e.message || 'Error de conexión.';
+      errEl.style.display = 'block';
+    } finally {
+      btn.textContent = 'Ingresar';
+      btn.disabled = false;
+    }
+  }
+
+  function adminLogout() {
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_username');
+    location.reload();
+  }
+
+  function adminPhotoClick() {
+    const token = localStorage.getItem('admin_token');
+    if (!token) return;
+    openEditor(document.getElementById('hero-photo-img'), token);
+  }
+
+  // ── Activar modo admin ──────────────────────────────────────────
+  function activateAdminMode(token, username) {
+    // Admin bar
+    const bar = document.getElementById('admin-bar');
+    bar.style.display = 'flex';
+    document.getElementById('admin-bar-user').textContent = '👤 ' + username;
+    document.body.style.paddingTop = '42px';
+
+    // Logout chip
+    document.getElementById('logout-chip').style.display = 'block';
+
+    // Inyectar CSS de lápices
+    const style = document.createElement('style');
+    style.id = 'admin-pencil-styles';
+    style.textContent = `
+      [data-content-key] { position:relative !important; }
+      [data-content-key]:hover { outline:2px dashed #EC4899 !important; outline-offset:4px; border-radius:4px; }
+      .edit-pencil-btn {
+        position:absolute; top:-13px; right:-13px; z-index:9990;
+        width:30px; height:30px;
+        background:linear-gradient(135deg,#EC4899,#BE185D);
+        color:white; border:2px solid white; border-radius:50%;
+        cursor:pointer; font-size:13px; line-height:1;
+        box-shadow:0 3px 10px rgba(236,72,153,.5);
+        opacity:0; transition:opacity .18s;
+        display:flex; align-items:center; justify-content:center;
+        pointer-events:auto;
+      }
+      [data-content-key]:hover .edit-pencil-btn { opacity:1; }
+    `;
+    document.head.appendChild(style);
+
+    // Agregar lápiz a cada elemento editable
+    document.querySelectorAll('[data-content-key]').forEach(el => {
+      const btn = document.createElement('button');
+      btn.className = 'edit-pencil-btn';
+      btn.innerHTML = '✏️';
+      btn.title = 'Editar: ' + el.dataset.contentKey;
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openEditor(el, token);
+      });
+      el.appendChild(btn);
+    });
+  }
+
+  // ── Editor inline ────────────────────────────────────────────────
+  let _editEl = null;
+  let _editToken = null;
+
+  function openEditor(el, token) {
+    _editEl = el;
+    _editToken = token;
+    const key = el.dataset.contentKey;
+    const type = el.dataset.contentType || 'text';
+    const currentVal = el.dataset.contentOriginal ?? (
+      type === 'image' ? (el.tagName === 'IMG' ? el.src : '') : el.innerText.trim()
+    );
+
+    document.getElementById('edit-modal-key').textContent = key;
+    document.getElementById('edit-text-area').style.display = type !== 'image' ? 'block' : 'none';
+    document.getElementById('edit-image-area').style.display = type === 'image' ? 'block' : 'none';
+
+    if (type !== 'image') {
+      document.getElementById('edit-textarea').value = currentVal;
+    } else {
+      const prevImg = document.getElementById('edit-img-preview-img');
+      prevImg.src = currentVal;
+      prevImg.style.display = currentVal ? 'block' : 'none';
+      document.getElementById('edit-img-preview-placeholder').style.display = currentVal ? 'none' : 'block';
+      document.getElementById('edit-img-input').value = '';
+    }
+
+    // Posicionar el modal cerca del elemento
+    const modal = document.getElementById('edit-modal');
+    modal.style.display = 'block';
+    const rect = el.getBoundingClientRect();
+    let top = rect.bottom + window.scrollY + 10;
+    let left = rect.left + window.scrollX;
+    const mw = Math.min(420, window.innerWidth * .92);
+    if (left + mw > window.innerWidth - 10) left = window.innerWidth - mw - 10;
+    if (top + 320 > window.scrollY + window.innerHeight) top = rect.top + window.scrollY - 330;
+    modal.style.top = Math.max(top, window.scrollY + 10) + 'px';
+    modal.style.left = Math.max(left, 10) + 'px';
+    modal.style.width = mw + 'px';
+  }
+
+  function closeEditor() {
+    document.getElementById('edit-modal').style.display = 'none';
+    _editEl = null;
+    _editToken = null;
+    document.getElementById('edit-img-input').value = '';
+  }
+
+  function previewImageEdit(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = document.getElementById('edit-img-preview-img');
+      img.src = e.target.result;
+      img.style.display = 'block';
+      document.getElementById('edit-img-preview-placeholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveEdit() {
+    if (!_editEl || !_editToken) return;
+    const key = _editEl.dataset.contentKey;
+    const type = _editEl.dataset.contentType || 'text';
+    const btn = document.getElementById('edit-save-btn');
+    btn.textContent = 'Guardando...';
+    btn.disabled = true;
+
+    try {
+      if (type === 'image') {
+        const fileInput = document.getElementById('edit-img-input');
+        if (!fileInput.files[0]) { closeEditor(); return; }
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+        const res = await fetch(`${API_BASE}/api/images/${key}`, {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + _editToken },
+          body: formData
+        });
+        if (res.ok) {
+          const data = await res.json();
+          applyContent(_editEl, data.url, 'image');
+          flashSuccess(btn);
+        }
+      } else {
+        const value = document.getElementById('edit-textarea').value;
+        const res = await fetch(`${API_BASE}/api/content/${encodeURIComponent(key)}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _editToken },
+          body: JSON.stringify({ value, type })
+        });
+        if (res.ok) {
+          applyContent(_editEl, value, type);
+          flashSuccess(btn);
+        }
+      }
+      setTimeout(closeEditor, 600);
+    } catch {
+      btn.textContent = '⚠️ Error';
+      setTimeout(() => { btn.innerHTML = '<i class="fas fa-check"></i> Guardar'; btn.disabled = false; }, 1500);
+    }
+  }
+
+  function flashSuccess(btn) {
+    btn.innerHTML = '✅ Guardado';
+    btn.style.background = 'linear-gradient(135deg,#10B981,#059669)';
+    setTimeout(() => {
+      btn.innerHTML = '<i class="fas fa-check"></i> Guardar';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 1500);
+  }
+
+  // ── Auto-iniciar modo admin si ya hay sesión ────────────────────
+  (function checkExistingSession() {
+    const token = localStorage.getItem('admin_token');
+    const username = localStorage.getItem('admin_username');
+    if (token && username) activateAdminMode(token, username);
+  })();
+
 </script>
 </body>
 </html>
