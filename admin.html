@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin – MarketingFloy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink:   #EC4899;
+      --pink-d: #BE185D;
+      --yellow: #FACC15;
+      --sidebar:#16213e;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; margin: 0; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 230px; min-height: 100vh;
+      background: linear-gradient(180deg, #1a1a2e, var(--sidebar));
+      position: fixed; top: 0; left: 0; z-index: 1000;
+      display: flex; flex-direction: column;
+      transition: transform .3s;
+    }
+    .sidebar-brand {
+      padding: 1.4rem 1.2rem;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .brand-logo {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 900;
+      background: linear-gradient(135deg, var(--pink), var(--yellow));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .sidebar-nav { padding: .75rem 0; flex: 1; overflow-y: auto; }
+    .nav-lnk {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .72rem 1.2rem; color: rgba(255,255,255,.6);
+      cursor: pointer; font-size: .88rem; font-weight: 500;
+      border-left: 3px solid transparent; transition: all .2s; user-select: none;
+    }
+    .nav-lnk:hover { color: #fff; background: rgba(255,255,255,.07); }
+    .nav-lnk.active { color: var(--yellow); background: rgba(250,204,21,.1); border-left-color: var(--yellow); }
+    .sidebar-footer { padding: 1rem 1.2rem; border-top: 1px solid rgba(255,255,255,.1); }
+
+    /* ── MAIN ── */
+    .main { margin-left: 230px; min-height: 100vh; }
+    .topbar {
+      background: #fff; padding: .85rem 1.5rem;
+      border-bottom: 1px solid #e9ecef;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .page-body { padding: 1.5rem; }
+
+    /* ── CARDS ── */
+    .card { border: none; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.07); }
+    .stat-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;
+    }
+
+    /* ── MESSAGES ── */
+    .msg-card { transition: transform .15s; }
+    .msg-card:hover { transform: translateY(-1px); }
+    .msg-card.unread { border-left: 4px solid var(--pink) !important; }
+
+    /* ── GALLERY ── */
+    .img-thumb { height: 155px; overflow: hidden; background: #e9ecef; position: relative; }
+    .img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-card { transition: transform .2s; }
+    .img-card:hover { transform: translateY(-2px); }
+
+    /* ── UPLOAD PROGRESS ── */
+    .progress-bar-gradient {
+      background: linear-gradient(90deg, var(--pink), var(--yellow)) !important;
+    }
+
+    /* ── LOGIN ── */
+    .login-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--pink-d) 0%, var(--pink) 55%, var(--yellow) 100%);
+      display: flex; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .login-card { width: 100%; max-width: 380px; border-radius: 20px !important; }
+    .form-control:focus { border-color: var(--pink); box-shadow: 0 0 0 .2rem rgba(236,72,153,.2); }
+    .btn-pink {
+      background: linear-gradient(135deg, var(--pink), var(--pink-d));
+      border: none; color: #fff; font-weight: 600;
+      padding: .75rem; border-radius: 50px; transition: all .25s;
+    }
+    .btn-pink:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(236,72,153,.4); color: #fff; }
+    .btn-pink:disabled { opacity: .7; cursor: not-allowed; }
+
+    /* ── BADGE ── */
+    .badge-pink { background: linear-gradient(135deg, var(--pink), var(--pink-d)); color: #fff; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════ LOGIN ══════════ -->
+  <div v-if="page === 'login'" class="login-page">
+    <div class="card login-card shadow-lg">
+      <div class="card-body p-5">
+        <div class="text-center mb-4">
+          <div style="font-size:2.8rem;">🔐</div>
+          <h4 style="font-family:'Playfair Display',serif;font-weight:900;" class="mt-2">Panel Admin</h4>
+          <p class="text-muted small mb-0">MarketingFloy · Floymer Bencomo</p>
+        </div>
+
+        <div v-if="loginError" class="alert alert-danger py-2 small">{{ loginError }}</div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Usuario</label>
+          <input v-model="lf.username" type="text" class="form-control" placeholder="admin"
+                 @keyup.enter="doLogin" autofocus />
+        </div>
+        <div class="mb-4">
+          <label class="form-label small fw-semibold">Contraseña</label>
+          <input v-model="lf.password" type="password" class="form-control" placeholder="••••••••"
+                 @keyup.enter="doLogin" />
+        </div>
+        <button @click="doLogin" class="btn btn-pink w-100" :disabled="loginLoading">
+          <span v-if="loginLoading"><i class="fas fa-circle-notch fa-spin me-2"></i>Ingresando...</span>
+          <span v-else><i class="fas fa-sign-in-alt me-2"></i>Ingresar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ ADMIN LAYOUT ══════════ -->
+  <div v-else class="d-flex">
+
+    <!-- Sidebar -->
+    <aside :class="['sidebar', sidebarOpen ? 'open' : '']">
+      <div class="sidebar-brand">
+        <div class="brand-logo">MarketingFloy</div>
+        <div class="text-white-50 small mt-1">Panel de Administración</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div @click="go('dashboard')" :class="['nav-lnk', page==='dashboard'?'active':'']">
+          <i class="fas fa-chart-bar fa-fw"></i> Dashboard
+        </div>
+        <div @click="go('messages')" :class="['nav-lnk', page==='messages'?'active':'']">
+          <i class="fas fa-envelope fa-fw"></i> Mensajes
+          <span v-if="unread > 0" class="ms-auto badge badge-pink rounded-pill">{{ unread }}</span>
+        </div>
+        <div @click="go('gallery')" :class="['nav-lnk', page==='gallery'?'active':'']">
+          <i class="fas fa-images fa-fw"></i> Galería
+        </div>
+        <div class="nav-lnk mt-3" style="opacity:.4;font-size:.75rem;cursor:default;padding-top:.4rem;padding-bottom:.4rem;">
+          PORTAFOLIO
+        </div>
+        <a :href="portfolioUrl" target="_blank" class="nav-lnk text-decoration-none">
+          <i class="fas fa-globe fa-fw"></i> Ver portafolio
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="text-white-50 small mb-2">
+          <i class="fas fa-user-circle me-1"></i> {{ loggedUser }}
+        </div>
+        <button @click="doLogout" class="btn btn-outline-danger btn-sm w-100">
+          <i class="fas fa-sign-out-alt me-1"></i> Cerrar sesión
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main flex-grow-1">
+      <!-- Topbar -->
+      <div class="topbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-sm btn-outline-secondary d-md-none" @click="sidebarOpen=!sidebarOpen">
+            <i class="fas fa-bars"></i>
+          </button>
+          <span class="fw-semibold">
+            <i :class="pageIcon" class="me-2 text-muted"></i>{{ pageTitle }}
+          </span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="text-muted small d-none d-sm-block">
+            <i class="fas fa-circle text-success me-1" style="font-size:.45rem;vertical-align:middle;"></i>
+            API activa
+          </span>
+        </div>
+      </div>
+
+      <!-- Page body -->
+      <div class="page-body">
+
+        <!-- ── DASHBOARD ── -->
+        <div v-if="page==='dashboard'">
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-xl-3">
+              <div class="card">
+                <div class="card-body d-flex align-items-center gap-3">
+                  <div class="stat-icon" style="background:#fff0f8;">
+                    <i class="fas fa-eye" style="color:var(--pink);"></i>
+                  </div>
+                  <div>
+                    <div class="fs-2 fw-bold lh-1">{{ stats?.total ?? '–' }}</div>
+                    <div class="text-muted small">Visitas totales</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-xl-3">
+              <div class="card">
+                <div class="card-body d-flex align-items-center gap-3">
+                  <div class="stat-icon" style="background:#fffbeb;">
+                    <i class="fas fa-calendar-day" style="color:var(--yellow);"></i>
+                  </div>
+                  <div>
+                    <div class="fs-2 fw-bold lh-1">{{ stats?.hoy ?? '–' }}</div>
+                    <div class="text-muted small">Visitas hoy</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-xl-3">
+              <div class="card">
+                <div class="card-body d-flex align-items-center gap-3">
+                  <div class="stat-icon" style="background:#fff0f8;">
+                    <i class="fas fa-envelope" style="color:var(--pink);"></i>
+                  </div>
+                  <div>
+                    <div class="fs-2 fw-bold lh-1">{{ stats?.unread ?? '–' }}</div>
+                    <div class="text-muted small">Mensajes sin leer</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-xl-3">
+              <div class="card">
+                <div class="card-body d-flex align-items-center gap-3">
+                  <div class="stat-icon" style="background:#fffbeb;">
+                    <i class="fas fa-images" style="color:var(--yellow);"></i>
+                  </div>
+                  <div>
+                    <div class="fs-2 fw-bold lh-1">{{ stats?.gallery ?? '–' }}</div>
+                    <div class="text-muted small">Imágenes galería</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h6 class="fw-bold mb-3">Accesos rápidos</h6>
+                  <div class="d-grid gap-2">
+                    <button @click="go('messages')" class="btn btn-outline-primary">
+                      <i class="fas fa-envelope me-2"></i>Ver mensajes de contacto
+                    </button>
+                    <button @click="go('gallery')" class="btn btn-outline-secondary">
+                      <i class="fas fa-images me-2"></i>Administrar galería
+                    </button>
+                    <a :href="portfolioUrl" target="_blank" class="btn btn-outline-success">
+                      <i class="fas fa-globe me-2"></i>Abrir portafolio
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h6 class="fw-bold mb-3">Estado del sistema</h6>
+                  <ul class="list-unstyled small mb-0">
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>API conectada y activa</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Base de datos SQLite operativa</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>CORS activo para portafolio</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>JWT autenticación activa (8h)</li>
+                    <li><i class="fas fa-database text-primary me-2"></i>
+                      Imágenes subidas: <strong>{{ stats?.gallery ?? 0 }}</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── MESSAGES ── -->
+        <div v-if="page==='messages'">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted small">{{ messages.length }} mensaje(s) · {{ unread }} sin leer</span>
+            <button @click="loadMessages" class="btn btn-sm btn-outline-secondary">
+              <i class="fas fa-sync-alt me-1"></i>Actualizar
+            </button>
+          </div>
+
+          <div v-if="messages.length === 0" class="text-center py-5 text-muted">
+            <i class="fas fa-inbox fa-3x d-block mb-3 opacity-25"></i>
+            No hay mensajes todavía.
+          </div>
+
+          <div v-for="m in messages" :key="m.id" class="mb-3">
+            <div :class="['card msg-card', !m.leido ? 'unread' : '']">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                  <div>
+                    <span class="fw-semibold">{{ m.nombre }}</span>
+                    <a :href="'mailto:'+m.email" class="text-muted ms-2 small text-decoration-none">{{ m.email }}</a>
+                    <span v-if="!m.leido" class="badge badge-pink ms-2 rounded-pill small">Nuevo</span>
+                  </div>
+                  <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                    <span class="text-muted small">{{ fmtDate(m.fechaCreacion) }}</span>
+                    <button v-if="!m.leido" @click="markRead(m.id)"
+                            class="btn btn-sm btn-outline-success">
+                      <i class="fas fa-check me-1"></i>Leído
+                    </button>
+                    <button @click="delMsg(m.id)" class="btn btn-sm btn-outline-danger">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                <p class="mb-0 text-secondary small" style="white-space:pre-wrap;line-height:1.6;">{{ m.mensaje }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── GALLERY ── -->
+        <div v-if="page==='gallery'">
+          <!-- Upload -->
+          <div class="card mb-4">
+            <div class="card-header bg-white fw-semibold border-bottom">
+              <i class="fas fa-upload me-2" style="color:var(--pink);"></i>Subir nueva imagen
+            </div>
+            <div class="card-body">
+              <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold">Título <span class="text-danger">*</span></label>
+                  <input v-model="uf.titulo" class="form-control" placeholder="Ej: Campaña El Patio" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold">Descripción</label>
+                  <input v-model="uf.descripcion" class="form-control" placeholder="Opcional" />
+                </div>
+                <div class="col-md-1">
+                  <label class="form-label small fw-semibold">Orden</label>
+                  <input v-model.number="uf.orden" type="number" class="form-control" min="0" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label small fw-semibold">Imagen (JPG / PNG / WebP)</label>
+                  <input id="fileInput" type="file" class="form-control" accept="image/*"
+                         @change="uploadImg" :disabled="uploading" />
+                </div>
+              </div>
+
+              <div v-if="uploading" class="mt-3">
+                <div class="progress" style="height:5px;">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar-gradient w-100"></div>
+                </div>
+                <small class="text-muted">Subiendo imagen...</small>
+              </div>
+
+              <div v-if="upStatus"
+                   :class="['alert py-2 small mt-3 mb-0', upStatus[0]==='✅' ? 'alert-success' : 'alert-danger']">
+                {{ upStatus }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Grid -->
+          <div v-if="gallery.length === 0" class="text-center py-5 text-muted">
+            <i class="fas fa-images fa-3x d-block mb-3 opacity-25"></i>
+            No hay imágenes en la galería todavía. ¡Sube la primera!
+          </div>
+
+          <div class="row g-3">
+            <div v-for="img in gallery" :key="img.id" class="col-6 col-md-4 col-lg-3">
+              <div :class="['card img-card h-100', !img.activo ? 'opacity-50' : '']">
+                <div class="img-thumb">
+                  <img :src="API_BASE + img.urlImagen" :alt="img.titulo"
+                       @error="e => { e.target.style.opacity='0'; }" />
+                  <span v-if="!img.activo"
+                        style="position:absolute;top:6px;right:6px;"
+                        class="badge bg-secondary">Oculta</span>
+                </div>
+                <div class="card-body p-2">
+                  <p class="small fw-semibold mb-1 text-truncate" :title="img.titulo">{{ img.titulo }}</p>
+                  <p class="small text-muted mb-2">Orden: {{ img.orden }}</p>
+                  <div class="d-flex gap-1">
+                    <button @click="toggleImg(img)"
+                            :class="['btn btn-sm flex-fill', img.activo ? 'btn-outline-warning' : 'btn-outline-success']">
+                      {{ img.activo ? 'Ocultar' : 'Mostrar' }}
+                    </button>
+                    <button @click="delImg(img.id)" class="btn btn-sm btn-outline-danger">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /page-body -->
+    </div><!-- /main -->
+  </div><!-- /admin layout -->
+</div><!-- /app -->
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, computed, watch, onMounted } = Vue;
+
+// ╔══════════════════════════════════════════════════╗
+// ║  Cambia esta URL si usas un puerto diferente.   ║
+// ║  • dotnet run directo  → http://localhost:5419  ║
+// ║  • Aspire              → ver Aspire Dashboard   ║
+// ╚══════════════════════════════════════════════════╝
+const API_BASE = 'http://localhost:5419';
+
+createApp({
+  setup() {
+    // ── Auth ──────────────────────────────────────────
+    const token     = ref(localStorage.getItem('admin_token')    || '');
+    const loggedUser= ref(localStorage.getItem('admin_username') || '');
+    const page      = ref('login');
+    const sidebarOpen = ref(false);
+
+    // ── Login form ────────────────────────────────────
+    const lf = ref({ username: '', password: '' });
+    const loginError   = ref('');
+    const loginLoading = ref(false);
+
+    // ── Data ──────────────────────────────────────────
+    const stats    = ref(null);
+    const messages = ref([]);
+    const gallery  = ref([]);
+
+    // ── Upload form ───────────────────────────────────
+    const uf       = ref({ titulo: '', descripcion: '', orden: 0 });
+    const uploading = ref(false);
+    const upStatus  = ref('');
+
+    // ── Computed ──────────────────────────────────────
+    const isAuth  = computed(() => !!token.value);
+    const unread  = computed(() => messages.value.filter(m => !m.leido).length);
+    const pageTitle = computed(() => ({ dashboard:'Dashboard', messages:'Mensajes de Contacto', gallery:'Galería de Imágenes' }[page.value] || ''));
+    const pageIcon  = computed(() => ({ dashboard:'fas fa-chart-bar', messages:'fas fa-envelope', gallery:'fas fa-images' }[page.value] || ''));
+    const portfolioUrl = window.location.href.replace(/admin\.html.*$/, 'index.html');
+
+    // ── Auth helpers ──────────────────────────────────
+    function authHeaders(extra = {}) {
+      return { Authorization: 'Bearer ' + token.value, ...extra };
+    }
+
+    async function doLogin() {
+      if (!lf.value.username || !lf.value.password) {
+        loginError.value = 'Completa usuario y contraseña.';
+        return;
+      }
+      loginLoading.value = true;
+      loginError.value = '';
+      try {
+        const res = await fetch(API_BASE + '/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: lf.value.username, password: lf.value.password })
+        });
+        if (!res.ok) { loginError.value = 'Credenciales incorrectas.'; return; }
+        const d = await res.json();
+        token.value     = d.token;
+        loggedUser.value = d.username;
+        localStorage.setItem('admin_token',    d.token);
+        localStorage.setItem('admin_username', d.username);
+        go('dashboard');
+      } catch {
+        loginError.value = 'Error de conexión. ¿Está corriendo la API?';
+      } finally {
+        loginLoading.value = false;
+      }
+    }
+
+    function doLogout() {
+      token.value = '';
+      loggedUser.value = '';
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_username');
+      go('login');
+    }
+
+    // ── Navigation ────────────────────────────────────
+    function go(p) {
+      page.value = p;
+      window.location.hash = p;
+      sidebarOpen.value = false;
+    }
+
+    // ── API calls ─────────────────────────────────────
+    async function loadStats() {
+      try {
+        const r = await fetch(API_BASE + '/api/visits/stats', { headers: authHeaders() });
+        if (r.ok) stats.value = await r.json();
+      } catch {}
+    }
+
+    async function loadMessages() {
+      try {
+        const r = await fetch(API_BASE + '/api/contact', { headers: authHeaders() });
+        if (r.ok) messages.value = await r.json();
+      } catch {}
+    }
+
+    async function markRead(id) {
+      await fetch(API_BASE + '/api/contact/' + id + '/read',
+        { method: 'PUT', headers: authHeaders() });
+      await loadMessages();
+    }
+
+    async function delMsg(id) {
+      if (!confirm('¿Eliminar este mensaje?')) return;
+      await fetch(API_BASE + '/api/contact/' + id,
+        { method: 'DELETE', headers: authHeaders() });
+      await loadMessages();
+    }
+
+    async function loadGallery() {
+      try {
+        const r = await fetch(API_BASE + '/api/gallery/all', { headers: authHeaders() });
+        if (r.ok) gallery.value = await r.json();
+      } catch {}
+    }
+
+    async function uploadImg(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!uf.value.titulo.trim()) {
+        upStatus.value = '⚠️ Escribe un título antes de subir.';
+        return;
+      }
+      uploading.value = true;
+      upStatus.value  = '';
+
+      const fd = new FormData();
+      fd.append('imagen',      file);
+      fd.append('titulo',      uf.value.titulo);
+      fd.append('descripcion', uf.value.descripcion);
+      fd.append('orden',       uf.value.orden);
+
+      try {
+        const r = await fetch(API_BASE + '/api/gallery/upload', {
+          method: 'POST',
+          headers: authHeaders(),
+          body: fd
+        });
+        if (r.ok) {
+          upStatus.value = '✅ Imagen subida correctamente.';
+          uf.value = { titulo: '', descripcion: '', orden: 0 };
+          document.getElementById('fileInput').value = '';
+          await loadGallery();
+        } else {
+          const d = await r.json().catch(() => ({}));
+          upStatus.value = '❌ ' + (d.error || 'Error al subir.');
+        }
+      } catch {
+        upStatus.value = '❌ Error de conexión.';
+      } finally {
+        uploading.value = false;
+      }
+    }
+
+    async function toggleImg(img) {
+      await fetch(API_BASE + '/api/gallery/' + img.id, {
+        method: 'PUT',
+        headers: authHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({
+          titulo: img.titulo, descripcion: img.descripcion,
+          orden: img.orden, activo: !img.activo
+        })
+      });
+      await loadGallery();
+    }
+
+    async function delImg(id) {
+      if (!confirm('¿Eliminar esta imagen definitivamente?')) return;
+      await fetch(API_BASE + '/api/gallery/' + id,
+        { method: 'DELETE', headers: authHeaders() });
+      await loadGallery();
+    }
+
+    // ── Helpers ───────────────────────────────────────
+    function fmtDate(str) {
+      return new Date(str).toLocaleString('es-DO', {
+        day:'2-digit', month:'2-digit', year:'2-digit',
+        hour:'2-digit', minute:'2-digit'
+      });
+    }
+
+    // ── Watchers ──────────────────────────────────────
+    watch(page, async p => {
+      if (!isAuth.value) return;
+      upStatus.value = '';
+      if (p === 'dashboard') await loadStats();
+      else if (p === 'messages') await loadMessages();
+      else if (p === 'gallery') await loadGallery();
+    });
+
+    // ── Mount ─────────────────────────────────────────
+    onMounted(() => {
+      const hash = window.location.hash.replace('#', '');
+      if (isAuth.value) {
+        go(hash && hash !== 'login' ? hash : 'dashboard');
+      } else {
+        go('login');
+      }
+      window.addEventListener('hashchange', () => {
+        const h = window.location.hash.replace('#', '');
+        if (!isAuth.value) { go('login'); return; }
+        if (h && h !== page.value) page.value = h;
+      });
+    });
+
+    return {
+      // state
+      page, sidebarOpen, loggedUser,
+      lf, loginError, loginLoading,
+      stats, messages, gallery,
+      uf, uploading, upStatus,
+      // computed
+      unread, pageTitle, pageIcon, portfolioUrl,
+      // methods
+      doLogin, doLogout, go,
+      loadMessages, markRead, delMsg,
+      loadGallery, uploadImg, toggleImg, delImg,
+      fmtDate,
+      // const
+      API_BASE
+    };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
