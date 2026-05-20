@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MarketingFloy.ApiService/MarketingFloy.ApiService.csproj" />
+  <Project Path="MarketingFloy.AppHost/MarketingFloy.AppHost.csproj" />
+  <Project Path="MarketingFloy.ServiceDefaults/MarketingFloy.ServiceDefaults.csproj" />
+  <Project Path="MarketingFloy.Web/MarketingFloy.Web.csproj" />
+</Solution>
