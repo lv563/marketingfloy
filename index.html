@@ -1328,6 +1328,10 @@
   <span>✏️ Modo edición activo — haz <strong>hover</strong> sobre cualquier elemento para editarlo</span>
   <div style="display:flex;gap:.8rem;align-items:center;">
     <span id="admin-bar-user" style="opacity:.8;font-weight:400;"></span>
+    <button onclick="openAdminPanel()" style="background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.5);
+      color:white;border-radius:100px;padding:.25rem .85rem;font-size:.78rem;cursor:pointer;font-weight:600;">
+      🛠️ Panel Admin
+    </button>
     <button onclick="adminLogout()" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);
       color:white;border-radius:100px;padding:.25rem .85rem;font-size:.78rem;cursor:pointer;">
       Salir
@@ -1736,6 +1740,86 @@
     }
   }
 
+  function openAdminPanel() {
+    document.getElementById('admin-panel-modal').style.display = 'flex';
+    loadAdminStats();
+    loadAdminMessages();
+  }
+
+  function closeAdminPanel() {
+    document.getElementById('admin-panel-modal').style.display = 'none';
+  }
+
+  async function loadAdminStats() {
+    const token = localStorage.getItem('admin_token');
+    try {
+      const r = await fetchWithTimeout(API_BASE + '/api/visits/stats', { headers: { 'Authorization': 'Bearer ' + token } });
+      if (!r.ok) return;
+      const s = await r.json();
+      document.getElementById('ap-total').textContent = s.total;
+      document.getElementById('ap-hoy').textContent = s.hoy;
+      document.getElementById('ap-msgs').textContent = s.unread;
+      document.getElementById('ap-gallery').textContent = s.gallery;
+    } catch {}
+  }
+
+  async function loadAdminMessages() {
+    const token = localStorage.getItem('admin_token');
+    const box = document.getElementById('ap-messages-list');
+    box.innerHTML = '<p style="color:#aaa;font-size:.85rem;">Cargando...</p>';
+    try {
+      const r = await fetchWithTimeout(API_BASE + '/api/contact', { headers: { 'Authorization': 'Bearer ' + token } });
+      if (!r.ok) { box.innerHTML = '<p style="color:#aaa;font-size:.85rem;">Sin mensajes.</p>'; return; }
+      const msgs = await r.json();
+      if (!msgs.length) { box.innerHTML = '<p style="color:#aaa;font-size:.85rem;">Sin mensajes.</p>'; return; }
+      box.innerHTML = msgs.slice(0, 10).map(m => `
+        <div style="border:1px solid #f0e0ea;border-radius:12px;padding:.8rem 1rem;margin-bottom:.6rem;background:${m.leido?'#fafafa':'#fff8fc'};">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;">
+            <strong style="color:#BE185D;font-size:.88rem;">${m.nombre}</strong>
+            <span style="font-size:.75rem;color:#aaa;">${new Date(m.fechaCreacion).toLocaleDateString('es')}</span>
+          </div>
+          <div style="font-size:.8rem;color:#666;margin-bottom:.3rem;">${m.email}</div>
+          <div style="font-size:.85rem;color:#333;">${m.mensaje}</div>
+          <div style="margin-top:.5rem;display:flex;gap:.5rem;">
+            ${!m.leido ? `<button onclick="markMsgRead(${m.id},this)" style="font-size:.75rem;background:#EC4899;color:white;border:none;border-radius:100px;padding:.2rem .7rem;cursor:pointer;">✓ Marcar leído</button>` : '<span style="font-size:.75rem;color:#aaa;">✓ Leído</span>'}
+            <button onclick="deleteMsg(${m.id},this)" style="font-size:.75rem;background:#fee2e2;color:#dc2626;border:none;border-radius:100px;padding:.2rem .7rem;cursor:pointer;">Eliminar</button>
+          </div>
+        </div>`).join('');
+    } catch { box.innerHTML = '<p style="color:#aaa;font-size:.85rem;">Error cargando mensajes.</p>'; }
+  }
+
+  async function markMsgRead(id, btn) {
+    const token = localStorage.getItem('admin_token');
+    await fetchWithTimeout(`${API_BASE}/api/contact/${id}/read`, { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token } });
+    btn.parentElement.innerHTML = '<span style="font-size:.75rem;color:#aaa;">✓ Leído</span>';
+    loadAdminStats();
+  }
+
+  async function deleteMsg(id, btn) {
+    if (!confirm('¿Eliminar este mensaje?')) return;
+    const token = localStorage.getItem('admin_token');
+    await fetchWithTimeout(`${API_BASE}/api/contact/${id}`, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+    btn.closest('div[style]').remove();
+    loadAdminStats();
+  }
+
+  async function adminChangePassword() {
+    const cur = document.getElementById('ap-pwd-current').value;
+    const nw  = document.getElementById('ap-pwd-new').value;
+    const msg = document.getElementById('ap-pwd-msg');
+    if (!cur || !nw) { msg.textContent = 'Completa ambos campos.'; msg.style.color = '#dc2626'; return; }
+    const token = localStorage.getItem('admin_token');
+    try {
+      const r = await fetchWithTimeout(API_BASE + '/api/auth/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ currentPassword: cur, newPassword: nw })
+      });
+      if (r.ok) { msg.textContent = '✓ Contraseña actualizada.'; msg.style.color = '#16a34a'; document.getElementById('ap-pwd-current').value=''; document.getElementById('ap-pwd-new').value=''; }
+      else { const e = await r.json(); msg.textContent = e.error || 'Error.'; msg.style.color = '#dc2626'; }
+    } catch { msg.textContent = 'Error de conexión.'; msg.style.color = '#dc2626'; }
+  }
+
   function adminLogout() {
     localStorage.removeItem('admin_token');
     localStorage.removeItem('admin_username');
@@ -1954,5 +2038,72 @@
   })();
 
 </script>
+
+<!-- ===== ADMIN PANEL MODAL ===== -->
+<div id="admin-panel-modal" style="display:none;position:fixed;inset:0;z-index:99999;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:white;border-radius:20px;width:100%;max-width:680px;max-height:90vh;
+    overflow-y:auto;box-shadow:0 24px 80px rgba(236,72,153,.25);">
+
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#EC4899,#BE185D);padding:1.2rem 1.5rem;border-radius:20px 20px 0 0;
+      display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="color:white;font-size:1.1rem;font-weight:700;">🛠️ Panel de Administración</div>
+        <div style="color:rgba(255,255,255,.75);font-size:.8rem;">MarketingFloy</div>
+      </div>
+      <button onclick="closeAdminPanel()" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);
+        color:white;border-radius:100px;padding:.3rem .9rem;cursor:pointer;font-size:.85rem;">✕ Cerrar</button>
+    </div>
+
+    <div style="padding:1.5rem;">
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem;">
+        <div style="background:#fff0f8;border-radius:14px;padding:1rem;text-align:center;">
+          <div id="ap-total" style="font-size:1.6rem;font-weight:800;color:#EC4899;">—</div>
+          <div style="font-size:.75rem;color:#888;">Visitas totales</div>
+        </div>
+        <div style="background:#fff8e6;border-radius:14px;padding:1rem;text-align:center;">
+          <div id="ap-hoy" style="font-size:1.6rem;font-weight:800;color:#FACC15;">—</div>
+          <div style="font-size:.75rem;color:#888;">Visitas hoy</div>
+        </div>
+        <div style="background:#fff0f8;border-radius:14px;padding:1rem;text-align:center;">
+          <div id="ap-msgs" style="font-size:1.6rem;font-weight:800;color:#EC4899;">—</div>
+          <div style="font-size:.75rem;color:#888;">Msgs sin leer</div>
+        </div>
+        <div style="background:#fff8e6;border-radius:14px;padding:1rem;text-align:center;">
+          <div id="ap-gallery" style="font-size:1.6rem;font-weight:800;color:#FACC15;">—</div>
+          <div style="font-size:.75rem;color:#888;">Fotos galería</div>
+        </div>
+      </div>
+
+      <!-- Mensajes -->
+      <div style="margin-bottom:1.5rem;">
+        <div style="font-weight:700;color:#BE185D;margin-bottom:.75rem;font-size:.95rem;">📬 Mensajes de contacto</div>
+        <div id="ap-messages-list"></div>
+      </div>
+
+      <!-- Cambiar contraseña -->
+      <div style="background:#fafafa;border-radius:14px;padding:1.2rem;border:1px solid #f0e0ea;">
+        <div style="font-weight:700;color:#BE185D;margin-bottom:.85rem;font-size:.95rem;">🔑 Cambiar contraseña</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <input id="ap-pwd-current" type="password" placeholder="Contraseña actual"
+            style="border:1px solid #f0e0ea;border-radius:10px;padding:.6rem .9rem;font-size:.88rem;outline:none;"/>
+          <input id="ap-pwd-new" type="password" placeholder="Nueva contraseña"
+            style="border:1px solid #f0e0ea;border-radius:10px;padding:.6rem .9rem;font-size:.88rem;outline:none;"/>
+          <button onclick="adminChangePassword()"
+            style="background:linear-gradient(135deg,#EC4899,#BE185D);color:white;border:none;border-radius:10px;
+            padding:.65rem;font-weight:700;cursor:pointer;font-size:.88rem;">
+            Actualizar contraseña
+          </button>
+          <div id="ap-pwd-msg" style="font-size:.82rem;min-height:1.2em;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
