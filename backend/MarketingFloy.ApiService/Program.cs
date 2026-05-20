@@ -50,7 +50,8 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
 
-    if (!db.AdminUsers.Any())
+    var adminUser = db.AdminUsers.FirstOrDefault(u => u.Username == "admin");
+    if (adminUser is null)
     {
         db.AdminUsers.Add(new AdminUser
         {
@@ -58,6 +59,12 @@ using (var scope = app.Services.CreateScope())
             PasswordHash = BCrypt.Net.BCrypt.HashPassword("Floy2025!"),
             FechaCreacion = DateTime.UtcNow
         });
+        db.SaveChanges();
+    }
+    else if (!BCrypt.Net.BCrypt.Verify("Floy2025!", adminUser.PasswordHash))
+    {
+        // Hash inválido (DB creada antes de BCrypt) — lo corregimos
+        adminUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword("Floy2025!");
         db.SaveChanges();
     }
 
