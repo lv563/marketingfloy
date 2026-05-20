@@ -1673,6 +1673,10 @@
   }
 
   function applyContent(el, value, type) {
+    // Preserve pencil button before overwriting content
+    const pencil = el.querySelector('.edit-pencil-btn');
+    if (pencil) pencil.remove();
+
     if (type === 'image') {
       const img = el.tagName === 'IMG' ? el : el.querySelector('img');
       if (img) img.src = value.startsWith('/') ? API_BASE + value : value;
@@ -1682,6 +1686,9 @@
       el.textContent = value;
     }
     el.dataset.contentOriginal = value;
+
+    // Re-attach pencil button
+    if (pencil) el.appendChild(pencil);
   }
 
   loadContentFromApi();
@@ -1803,9 +1810,10 @@
     _editToken = token;
     const key = el.dataset.contentKey;
     const type = el.dataset.contentType || 'text';
-    const currentVal = el.dataset.contentOriginal ?? (
-      type === 'image' ? (el.tagName === 'IMG' ? el.src : '') : el.innerText.trim()
-    );
+    // Use saved original value; fallback strips pencil emoji from innerText
+    const rawText = el.innerText.replace('✏️', '').trim();
+    const currentVal = el.dataset.contentOriginal
+      ?? (type === 'image' ? (el.tagName === 'IMG' ? el.src : '') : rawText);
 
     document.getElementById('edit-modal-key').textContent = key;
     document.getElementById('edit-text-area').style.display = type !== 'image' ? 'block' : 'none';
