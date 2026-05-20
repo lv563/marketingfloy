@@ -1860,21 +1860,28 @@
     reader.readAsDataURL(file);
   }
 
+  function fetchWithTimeout(url, opts, ms = 8000) {
+    const ctrl = new AbortController();
+    const id = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { ...opts, signal: ctrl.signal }).finally(() => clearTimeout(id));
+  }
+
   async function saveEdit() {
     if (!_editEl || !_editToken) return;
     const key = _editEl.dataset.contentKey;
     const type = _editEl.dataset.contentType || 'text';
     const btn = document.getElementById('edit-save-btn');
-    btn.textContent = 'Guardando...';
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Guardando...';
     btn.disabled = true;
 
     try {
+      let res;
       if (type === 'image') {
         const fileInput = document.getElementById('edit-img-input');
         if (!fileInput.files[0]) { closeEditor(); return; }
         const formData = new FormData();
         formData.append('image', fileInput.files[0]);
-        const res = await fetch(`${API_BASE}/api/images/${key}`, {
+        res = await fetchWithTimeout(`${API_BASE}/api/images/${key}`, {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + _editToken },
           body: formData
@@ -1883,10 +1890,13 @@
           const data = await res.json();
           applyContent(_editEl, data.url, 'image');
           flashSuccess(btn);
+          setTimeout(closeEditor, 700);
+        } else {
+          throw new Error(`API respondió ${res.status}`);
         }
       } else {
         const value = document.getElementById('edit-textarea').value;
-        const res = await fetch(`${API_BASE}/api/content/${encodeURIComponent(key)}`, {
+        res = await fetchWithTimeout(`${API_BASE}/api/content/${encodeURIComponent(key)}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _editToken },
           body: JSON.stringify({ value, type })
@@ -1894,12 +1904,27 @@
         if (res.ok) {
           applyContent(_editEl, value, type);
           flashSuccess(btn);
+          setTimeout(closeEditor, 700);
+        } else if (res.status === 401) {
+          throw new Error('Sesión expirada. Vuelve a hacer login.');
+        } else {
+          throw new Error(`Error del servidor (${res.status})`);
         }
       }
-      setTimeout(closeEditor, 600);
-    } catch {
-      btn.textContent = '⚠️ Error';
-      setTimeout(() => { btn.innerHTML = '<i class="fas fa-check"></i> Guardar'; btn.disabled = false; }, 1500);
+    } catch (err) {
+      const isTimeout = err.name === 'AbortError';
+      const msg = isTimeout
+        ? '⚠️ Sin respuesta del servidor. ¿Está corriendo la API?'
+        : `⚠️ ${err.message || 'Error al guardar'}`;
+      btn.innerHTML = msg;
+      btn.style.background = '#DC2626';
+      btn.style.fontSize = '.75rem';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> Guardar';
+        btn.style.background = '';
+        btn.style.fontSize = '';
+        btn.disabled = false;
+      }, 3500);
     }
   }
 
