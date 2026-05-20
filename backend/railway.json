@@ -1,0 +1,11 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "startCommand": "dotnet MarketingFloy.ApiService.dll",
+    "healthcheckPath": "/api/gallery",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
